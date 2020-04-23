@@ -30,7 +30,7 @@ jobs:
           path: ~/.nuget/packages
           key: aspnet-${{ hashFiles('**/packages.lock.json') }}
       - name: dotnet_build
-        run: dotnet build --no-restore
+        run: dotnet build
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
   test:
@@ -40,6 +40,11 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
+      - name: dotnet_cache
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.nuget/packages
+          key: aspnet-${{ hashFiles('**/packages.lock.json') }}
       - name: dotnet_test
         run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover --logger trx --results-directory ./test_coverage/
         working-directory: ${{ env.WORKING_DIRECTORY }}
