@@ -8,12 +8,12 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      # - run: dotnet nuget locals all --clear
-      #   working-directory: ${{ env.WORKING_DIRECTORY }}
-      # - run: git clean -xfd
-      # - run: git rm **/packages.lock.json -f
-      # - run: dotnet restore
-      #   working-directory: ${{ env.WORKING_DIRECTORY }}
+      - run: dotnet nuget locals all --clear
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+      - run: git clean -xfd
+      - run: git rm **/packages.lock.json -f
+      - run: dotnet restore
+        working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: dotnet_build
         run: dotnet build
         working-directory: ${{ env.WORKING_DIRECTORY }}
