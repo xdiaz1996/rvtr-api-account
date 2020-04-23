@@ -8,12 +8,12 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      - run: dotnet nuget locals all --clear
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-      - run: git clean -xfd
-      - run: git rm **/packages.lock.json -f
-      - run: dotnet restore
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+      # - run: dotnet nuget locals all --clear
+      #   working-directory: ${{ env.WORKING_DIRECTORY }}
+      # - run: git clean -xfd
+      # - run: git rm **/packages.lock.json -f
+      # - run: dotnet restore
+      #   working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: dotnet_build
         run: dotnet build
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -25,7 +25,7 @@ jobs:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
       - name: dotnet_test
-        run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover --logger trx --no-restore --results-directory ./test_coverage/
+        run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover --logger trx --results-directory ./test_coverage/
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: opencover_upload
         uses: actions/upload-artifact@v1.0.0
