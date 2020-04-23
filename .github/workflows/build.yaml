@@ -8,14 +8,12 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      - run: dotnet nuget locals all --clear
-        working-directory: ${{ env.WORKING_DIRECTORY }}
-      - run: git clean -xfd
-      - run: git rm **/packages.lock.json -f
-      - run: dotnet restore
-        working-directory: ${{ env.WORKING_DIRECTORY }}
+      # - run: git clean -xfd
+      # - run: git rm **/packages.lock.json -f
       - name: dotnet_build
-        run: dotnet build
+        run: |
+          dotnet nuget locals all --clear
+          dotnet build
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
   test:
@@ -25,7 +23,9 @@ jobs:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
       - name: dotnet_test
-        run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover --logger trx --results-directory ./test_coverage/
+        run: |
+          dotnet nuget locals all --clear
+          dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover --logger trx --results-directory ./test_coverage/
         working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: opencover_upload
         uses: actions/upload-artifact@v1.0.0
@@ -62,6 +62,7 @@ jobs:
       - name: sonar_scan_pull_request
         run: |
           dotnet sonarscanner begin -k:rvtr_api_account -o:rvtr -s:$(pwd)/sonar.analysis.xml
+          dotnet nuget locals all --clear
           dotnet build
           dotnet sonarscanner end
         working-directory: ${{ env.WORKING_DIRECTORY }}
