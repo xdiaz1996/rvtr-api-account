@@ -8,8 +8,8 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      - run: git clean -xfd
-      - run: git rm **/packages.lock.json -f
+      # - run: git clean -xfd
+      # - run: git rm **/packages.lock.json -f
       - name: dotnet_build
         run: dotnet build
         working-directory: ${{ env.WORKING_DIRECTORY }}
