@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: actions_checkout
-        run: actions/checkout@v2.1.0
+        uses: actions/checkout@v2.1.0
       - name: dotnet_build
         run: dotnet build
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - name: actions_checkout
-        run: actions/checkout@v2.1.0
+        uses: actions/checkout@v2.1.0
       - name: dotnet_test
-        run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=cobertura
+        run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
   analyze:
