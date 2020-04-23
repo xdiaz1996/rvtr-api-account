@@ -43,7 +43,7 @@ jobs:
         run: dotnet tool install --global dotnet-sonarscanner
       - name: sonar_scan_pull_request
         run: |
-          dotnet sonarscanner begin -key:rvtr_api_account -s:$(pwd)/sonar.analysis.xml
+          dotnet sonarscanner begin -k:rvtr_api_account -o:rvtr -s:$(pwd)/sonar.analysis.xml
           dotnet build
           dotnet sonarscanner end
         working-directory: ${{ env.WORKING_DIRECTORY }}
