@@ -3,7 +3,6 @@
   <PropertyGroup>
     <DebugType>Full</DebugType>
     <IsPackable>false</IsPackable>
-    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
