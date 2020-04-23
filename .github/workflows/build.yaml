@@ -21,14 +21,26 @@ jobs:
       - name: dotnet_test
         run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover
         working-directory: ${{ env.WORKING_DIRECTORY }}
+      - name: opencover_upload
+        uses: actions/upload-artifact@v1.0.0
+        with:
+          name: code_coverage
+          path: ${{ env.WORKING_DIRECTORY }}/code_coverage
 
   analyze:
     name: analyze_job
     needs: [build, test]
     runs-on: ubuntu-18.04
     steps:
-      - name: analyze_script
-        run: echo 'analyze script'
+      - name: actions_checkout
+        uses: actions/checkout@v2.1.0
+      - name: opencover_download
+        uses: actions/download-artifact@v1.0.0
+        with:
+          name: code_coverage
+          path: ${{ env.WORKING_DIRECTORY }}/code_coverage
+      - name: sonar_install
+        run: dotnet tool install --global dotnet-sonarscanner
 
   pack:
     name: pack_job
