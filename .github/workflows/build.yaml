@@ -8,6 +8,8 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
+      - name: nuget_clear
+        run: dotnet nuget locals all --clear
       - name: dotnet_build
         run: dotnet build
         working-directory: ${{ env.WORKING_DIRECTORY }}
