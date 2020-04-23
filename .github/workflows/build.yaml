@@ -13,7 +13,7 @@ jobs:
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
   test:
-    name: test_job
+    name: test_aspnet
     runs-on: ubuntu-18.04
     steps:
       - name: actions_checkout
@@ -28,7 +28,7 @@ jobs:
           path: ${{ env.WORKING_DIRECTORY }}/code_coverage
 
   analyze:
-    name: analyze_job
+    name: analyze_aspnet
     needs: [build, test]
     runs-on: ubuntu-18.04
     steps:
@@ -41,6 +41,12 @@ jobs:
           path: ${{ env.WORKING_DIRECTORY }}/code_coverage
       - name: sonar_install
         run: dotnet tool install --global dotnet-sonarscanner
+      - name: sonar_scan
+        run: |
+          dotnet sonarscanner begin
+          dotnet build
+          dotnet sonarscanner end
+        working-directory: ${{ env.WORKING_DIRECTORY }}
 
   pack:
     name: pack_job
