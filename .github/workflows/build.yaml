@@ -2,16 +2,34 @@ env:
   WORKING_DIRECTORY: aspnet
 
 jobs:
+  restore:
+    name: restore_aspnet
+    runs-on: ubuntu-18.04
+    steps:
+      - name: actions_checkout
+        uses: actions/checkout@v2.1.0
+      - name: dotnet_cache
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.nuget/packages
+          key: aspnet-${{ hashFiles('**/packages.lock.json') }}
+      - name: dotnet_restore
+        run: dotnet restore
+        working-directory: ${{ env.WORKING_DIRECTORY }}
+
   build:
     name: build_aspnet
     runs-on: ubuntu-18.04
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      # - run: git clean -xfd
-      # - run: git rm **/packages.lock.json -f
+      - name: dotnet_cache
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.nuget/packages
+          key: aspnet-${{ hashFiles('**/packages.lock.json') }}
       - name: dotnet_build
-        run: dotnet build
+        run: dotnet build --no-restore
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
   test:
@@ -20,8 +38,6 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      - run: git clean -xfd
-      - run: git rm **/packages.lock.json -f
       - name: dotnet_test
         run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover --logger trx --results-directory ./test_coverage/
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -45,8 +61,6 @@ jobs:
         uses: actions/checkout@v2.1.0
       - name: git_fetch
         run: git fetch --unshallow
-      - run: git clean -xfd
-      - run: git rm **/packages.lock.json -f
       - name: opencover_download
         uses: actions/download-artifact@v1.0.0
         with:
@@ -70,7 +84,7 @@ jobs:
         name: sonar_scan_pull_request
         run: |
           dotnet sonarscanner begin -k:rvtr_api_account -o:rvtr -s:$(pwd)/sonar.analysis.xml
-          dotnet build --no-restore
+          dotnet build
           dotnet sonarscanner end
         working-directory: ${{ env.WORKING_DIRECTORY }}
 
