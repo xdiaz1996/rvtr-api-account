@@ -8,3 +8,6 @@ appsettings*
 
 # macos
 .DS_Store
+
+# sonarcloud
+.sonarqube/
