@@ -4,6 +4,7 @@
     <DebugType>Full</DebugType>
     <DisableImplicitNuGetFallbackFolder>true</DisableImplicitNuGetFallbackFolder>
     <IsPackable>false</IsPackable>
+    <NoWarn>NU1403</NoWarn>
     <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
