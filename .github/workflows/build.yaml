@@ -8,9 +8,6 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      - name: dotnet_restore
-        run: dotnet restore --locked-mode
-        working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: dotnet_build
         run: dotnet build --no-restore
         working-directory: ${{ env.WORKING_DIRECTORY }}
@@ -21,9 +18,6 @@ jobs:
     steps:
       - name: actions_checkout
         uses: actions/checkout@v2.1.0
-      - name: dotnet_restore
-        run: dotnet restore --locked-mode
-        working-directory: ${{ env.WORKING_DIRECTORY }}
       - name: dotnet_test
         run: dotnet test -p:CollectCoverage=true -p:CoverletOutput=../code_coverage/ -p:CoverletOutputFormat=opencover --logger trx --no-restore --results-directory ./test_coverage/
         working-directory: ${{ env.WORKING_DIRECTORY }}
