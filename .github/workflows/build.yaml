@@ -80,6 +80,11 @@ jobs:
           path: ${{ env.WORKING_DIRECTORY }}/test_coverage
       - name: sonar_install
         run: dotnet tool install --global dotnet-sonarscanner
+      - name: dotnet_cache
+        uses: actions/cache@v1.1.2
+        with:
+          path: ~/.nuget/packages
+          key: aspnet-${{ hashFiles('**/packages.lock.json') }}
       - if: github.event_name == 'pull_request'
         name: sonar_scan_pull_request
         run: |
