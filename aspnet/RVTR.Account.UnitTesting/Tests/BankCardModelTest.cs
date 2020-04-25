@@ -64,7 +64,7 @@ namespace RVTR.Account.UnitTesting.Tests
     {
       var validationContext = new ValidationContext(bankCard);
 
-      Assert.Null(bankCard.Validate(validationContext));
+      Assert.Empty(bankCard.Validate(validationContext));
     }
   }
 }

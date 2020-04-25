@@ -39,7 +39,7 @@ namespace RVTR.Account.UnitTesting.Tests
     {
       var validationContext = new ValidationContext(account);
 
-      Assert.Null(account.Validate(validationContext));
+      Assert.Empty(account.Validate(validationContext));
     }
   }
 }
