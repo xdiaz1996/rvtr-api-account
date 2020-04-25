@@ -50,21 +50,21 @@ namespace RVTR.Account.UnitTesting.Tests
 
     [Theory]
     [MemberData(nameof(_bankCards))]
-    public void Test_Create_BankCardModel(BankCardModel account)
+    public void Test_Create_BankCardModel(BankCardModel bankCard)
     {
-      var validationContext = new ValidationContext(account);
-      var actual = Validator.TryValidateObject(account, validationContext, null, true);
+      var validationContext = new ValidationContext(bankCard);
+      var actual = Validator.TryValidateObject(bankCard, validationContext, null, true);
 
       Assert.True(actual);
     }
 
     [Theory]
     [MemberData(nameof(_bankCards))]
-    public void Test_Validate_BankCardModel(BankCardModel account)
+    public void Test_Validate_BankCardModel(BankCardModel bankCard)
     {
-      var validationContext = new ValidationContext(account);
+      var validationContext = new ValidationContext(bankCard);
 
-      Assert.Null(account.Validate(validationContext));
+      Assert.Null(bankCard.Validate(validationContext));
     }
   }
 }
