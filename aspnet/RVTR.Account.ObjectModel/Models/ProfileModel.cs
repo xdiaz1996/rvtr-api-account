@@ -10,15 +10,13 @@ namespace RVTR.Account.ObjectModel.Models
   {
     public int Id { get; set; }
 
-    [DataType(DataType.EmailAddress)]
-    [Required]
+    [EmailAddress, Required]
     public string Email { get; set; }
 
     [Required]
     public NameModel Name { get; set; }
 
-    [DataType(DataType.PhoneNumber)]
-    [Required]
+    [Phone, Required]
     public string Phone { get; set; }
 
     /// <summary>
@@ -26,6 +24,6 @@ namespace RVTR.Account.ObjectModel.Models
     /// </summary>
     /// <param name="validationContext"></param>
     /// <returns></returns>
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) => throw new System.NotImplementedException();
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) => new List<ValidationResult>();
   }
 }
