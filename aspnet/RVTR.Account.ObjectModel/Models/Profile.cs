@@ -4,18 +4,17 @@ using System.ComponentModel.DataAnnotations;
 namespace RVTR.Account.ObjectModel.Models
 {
   /// <summary>
-  /// Represents the _Account_ model
+  /// Represents the _Profile_ model
   /// </summary>
-  public class AccountModel : IValidatableObject
+  public class Profile : IValidatableObject
   {
     public int Id { get; set; }
-    public Address Address { get; set; }
-    public string Name { get; set; }
-    public IEnumerable<Payment> Payments { get; set; }
-    public IEnumerable<Profile> MyProperty { get; set; }
+    public string Email { get; set; }
+    public Name Name { get; set; }
+    public string Phone { get; set; }
 
     /// <summary>
-    /// Represents the _Account_ `Validate` method
+    /// Represents the _Profile_ `Validate` method
     /// </summary>
     /// <param name="validationContext"></param>
     /// <returns></returns>
