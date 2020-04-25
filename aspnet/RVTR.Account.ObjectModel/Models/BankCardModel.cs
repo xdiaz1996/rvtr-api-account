@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -7,10 +7,16 @@ namespace RVTR.Account.ObjectModel.Models
   /// <summary>
   /// Represents the _BankCard_ model
   /// </summary>
-  public class BankCard : IValidatableObject
+  public class BankCardModel : IValidatableObject
   {
     public int Id { get; set; }
+
+    [DataType(DataType.Date)]
+    [Required]
     public DateTime Expiry { get; set; }
+
+    [DataType(DataType.CreditCard)]
+    [Required]
     public string Number { get; set; }
 
     /// <summary>

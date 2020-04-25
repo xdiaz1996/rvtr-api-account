@@ -1,20 +1,23 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RVTR.Account.ObjectModel.Models
 {
   /// <summary>
-  /// Represents the _Profile_ model
+  /// Represents the _Payment_ model
   /// </summary>
-  public class Profile : IValidatableObject
+  public class PaymentModel : IValidatableObject
   {
     public int Id { get; set; }
-    public string Email { get; set; }
-    public Name Name { get; set; }
-    public string Phone { get; set; }
+
+    [Required]
+    public BankCardModel BankCard { get; set; }
+
+    [Required]
+    public string Name { get; set; }
 
     /// <summary>
-    /// Represents the _Profile_ `Validate` method
+    /// Represents the _Payment_ `Validate` method
     /// </summary>
     /// <param name="validationContext"></param>
     /// <returns></returns>

@@ -9,10 +9,18 @@ namespace RVTR.Account.ObjectModel.Models
   public class AccountModel : IValidatableObject
   {
     public int Id { get; set; }
-    public Address Address { get; set; }
+
+    [Required]
+    public AddressModel Address { get; set; }
+
+    [Required]
     public string Name { get; set; }
-    public IEnumerable<Payment> Payments { get; set; }
-    public IEnumerable<Profile> MyProperty { get; set; }
+
+    [Required]
+    public IEnumerable<PaymentModel> Payments { get; set; }
+
+    [Required]
+    public IEnumerable<ProfileModel> Profiles { get; set; }
 
     /// <summary>
     /// Represents the _Account_ `Validate` method
