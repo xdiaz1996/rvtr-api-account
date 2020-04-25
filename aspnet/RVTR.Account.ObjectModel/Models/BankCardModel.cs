@@ -11,12 +11,10 @@ namespace RVTR.Account.ObjectModel.Models
   {
     public int Id { get; set; }
 
-    [DataType(DataType.Date)]
     [Required]
     public DateTime Expiry { get; set; }
 
-    [DataType(DataType.CreditCard)]
-    [Required]
+    [CreditCard, Required]
     public string Number { get; set; }
 
     /// <summary>
@@ -24,6 +22,6 @@ namespace RVTR.Account.ObjectModel.Models
     /// </summary>
     /// <param name="validationContext"></param>
     /// <returns></returns>
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) => throw new NotImplementedException();
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext) => null;
   }
 }
