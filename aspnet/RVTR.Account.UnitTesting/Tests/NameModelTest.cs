@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using RVTR.Account.ObjectModel.Models;
 using Xunit;
 
-namespace RVTR.name.UnitTesting.Tests
+namespace RVTR.Account.UnitTesting.Tests
 {
   public class NameModelTest
   {
