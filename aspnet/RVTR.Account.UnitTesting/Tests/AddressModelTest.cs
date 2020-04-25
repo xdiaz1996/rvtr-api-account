@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using RVTR.Account.ObjectModel.Models;
 using Xunit;
 
@@ -5,11 +8,39 @@ namespace RVTR.Account.UnitTesting.Tests
 {
   public class AddressModelTest
   {
-    private readonly AddressModel _sut = new AddressModel();
-
-    public void Test_Create_AddressModel()
+    public static readonly IEnumerable<Object[]> _accounts = new List<Object[]>
     {
-      Assert.NotNull(_sut);
+      new object[]
+      {
+        new AddressModel()
+        {
+          Id = 0,
+          City = "city",
+          Country = "country",
+          PostalCode = "postalcode",
+          StateProvince = "stateprovince",
+          Street = "street"
+        }
+      }
+    };
+
+    [Theory]
+    [MemberData(nameof(_accounts))]
+    public void Test_Create_AddressModel(AddressModel address)
+    {
+      var validationContext = new ValidationContext(address);
+      var actual = Validator.TryValidateObject(address, validationContext, null, true);
+
+      Assert.True(actual);
+    }
+
+    [Theory]
+    [MemberData(nameof(_accounts))]
+    public void Test_Validate_AddressModel(AddressModel address)
+    {
+      var validationContext = new ValidationContext(address);
+
+      Assert.Null(address.Validate(validationContext));
     }
   }
 }
