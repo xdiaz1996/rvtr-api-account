@@ -1,9 +1,13 @@
-using System.Collections.Generic;
-
 namespace RVTR.Account.DataContext.Repositories
 {
+  /// <summary>
+  /// Represents the _UnitOfWork_ interface
+  /// </summary>
   public interface IUnitOfWork
   {
-    void Commit();
+    /// <summary>
+    /// Represents the _UnitOfWork_ `Commit` method
+    /// </summary>
+    void CommitAsync();
   }
 }

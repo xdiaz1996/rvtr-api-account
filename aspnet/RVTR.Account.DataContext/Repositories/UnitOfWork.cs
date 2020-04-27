@@ -1,9 +1,21 @@
-using System;
-
 namespace RVTR.Account.DataContext.Repositories
 {
+  /// <summary>
+  /// Represents the _UnitOfWork_ repository
+  /// </summary>
   public class UnitOfWork : IUnitOfWork
   {
-    public void Commit() => throw new NotImplementedException();
+    private readonly AccountContext _context;
+
+    public UnitOfWork(AccountContext context)
+    {
+      _context = context;
+    }
+
+    /// <summary>
+    /// Represents the _UnitOfWork_ `Commit` method
+    /// </summary>
+    /// <returns></returns>
+    public async void CommitAsync() => await _context.SaveChangesAsync();
   }
 }
