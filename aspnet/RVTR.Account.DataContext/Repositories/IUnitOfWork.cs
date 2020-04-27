@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace RVTR.Account.DataContext.Repositories
 {
   /// <summary>
@@ -8,6 +10,6 @@ namespace RVTR.Account.DataContext.Repositories
     /// <summary>
     /// Represents the _UnitOfWork_ `Commit` method
     /// </summary>
-    void CommitAsync();
+    Task<int> CommitAsync();
   }
 }

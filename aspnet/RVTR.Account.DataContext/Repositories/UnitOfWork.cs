@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+
 namespace RVTR.Account.DataContext.Repositories
 {
   /// <summary>
@@ -16,6 +18,6 @@ namespace RVTR.Account.DataContext.Repositories
     /// Represents the _UnitOfWork_ `Commit` method
     /// </summary>
     /// <returns></returns>
-    public async void CommitAsync() => await _context.SaveChangesAsync();
+    public async Task<int> CommitAsync() => await _context.SaveChangesAsync();
   }
 }

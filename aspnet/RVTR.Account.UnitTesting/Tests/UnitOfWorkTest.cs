@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RVTR.Account.DataContext;
@@ -9,18 +10,21 @@ namespace RVTR.Account.UnitTesting.Tests
 {
   public class UnitOfWorkTest
   {
-    private static readonly SqliteConnection _connection = new SqliteConnection("DataSource=:memory:");
+    private static readonly SqliteConnection _connection = new SqliteConnection("Data Source=:memory:");
     private static readonly DbContextOptions<AccountContext> _options = new DbContextOptionsBuilder<AccountContext>().UseSqlite(_connection).Options;
-    private readonly AccountContext _context = new AccountContext(_options);
-
-    [Fact]
-    public void Test_UnitOfWork_CommitAsync()
+    private static readonly AccountContext _context = new AccountContext(_options);
+    public static readonly IEnumerable<object[]> _unitOfWorks = new List<object[]>
     {
-      var sut = new UnitOfWork(_context);
+      new object[] { new UnitOfWork(_context) }
+    };
 
-      Action actual = () => sut.CommitAsync();
+    [Theory]
+    [MemberData(nameof(_unitOfWorks))]
+    public async void Test_UnitOfWork_CommitAsync(UnitOfWork unitOfWork)
+    {
+      var actual = await unitOfWork.CommitAsync();
 
-      Assert.IsType<Action>(actual);
+      Assert.True(actual >= 0);
     }
   }
 }
