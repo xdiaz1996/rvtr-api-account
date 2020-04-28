@@ -1,30 +1,32 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RVTR.Account.DataContext;
-using RVTR.Account.DataContext.Repositories;
 using Xunit;
 
 namespace RVTR.Account.UnitTesting.Tests
 {
-  public class UnitOfWorkTest
+  public class AccountContextTest
   {
     private static readonly SqliteConnection _connection = new SqliteConnection("Data Source=:memory:");
     private static readonly DbContextOptions<AccountContext> _options = new DbContextOptionsBuilder<AccountContext>().UseSqlite(_connection).Options;
     private static readonly AccountContext _context = new AccountContext(_options);
-    public static readonly IEnumerable<object[]> _unitOfWorks = new List<object[]>
-    {
-      new object[] { new UnitOfWork(_context) }
-    };
 
-    [Theory]
-    [MemberData(nameof(_unitOfWorks))]
-    public async void Test_UnitOfWork_CommitAsync(UnitOfWork unitOfWork)
+    public AccountContextTest()
     {
-      var actual = await unitOfWork.CommitAsync();
+      _connection.Open();
+      _context.Database.EnsureCreated();
+    }
 
-      Assert.True(actual >= 0);
+    ~AccountContextTest()
+    {
+      _connection.Close();
+    }
+
+    [Fact]
+    public async void Test_Create_AccountContext()
+    {
+      Assert.Empty(await _context.Accounts.ToListAsync());
+      Assert.Empty(await _context.Profiles.ToListAsync());
     }
   }
 }

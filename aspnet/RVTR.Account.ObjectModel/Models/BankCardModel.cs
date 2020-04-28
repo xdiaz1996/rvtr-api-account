@@ -11,10 +11,8 @@ namespace RVTR.Account.ObjectModel.Models
   {
     public int Id { get; set; }
 
-    [Required]
     public DateTime Expiry { get; set; }
 
-    [CreditCard, Required]
     public string Number { get; set; }
 
     /// <summary>

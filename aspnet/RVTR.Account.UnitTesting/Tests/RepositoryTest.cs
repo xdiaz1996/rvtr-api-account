@@ -1,66 +1,155 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using RVTR.Account.DataContext;
 using RVTR.Account.DataContext.Repositories;
+using RVTR.Account.ObjectModel.Models;
 using Xunit;
 
 namespace RVTR.Account.UnitTesting.Tests
 {
-  public class Repository_Test
+  public class RepositoryTest
   {
-    private readonly Repository<object> _sut = new Repository<object>();
-    public static readonly IEnumerable<object[]> _objects = new List<object[]>
+    private static readonly SqliteConnection _connection = new SqliteConnection("Data Source=:memory:");
+    private static readonly DbContextOptions<AccountContext> _options = new DbContextOptionsBuilder<AccountContext>().UseSqlite(_connection).Options;
+    private static readonly AccountContext _ctx = new AccountContext(_options);
+
+    public static readonly IEnumerable<object[]> _repositories = new List<object[]>()
     {
-      new object[] { new object() },
-      new object[] { new object() },
-      new object[] { new object() }
+      new object[] { new Repository<AccountModel>(_ctx) },
+      new object[] { new Repository<ProfileModel>(_ctx) }
+    };
+
+    public static readonly IEnumerable<object[]> _repositoriesWithKeys = new List<object[]>()
+    {
+      new object[] { new Repository<AccountModel>(_ctx), 1 },
+      new object[] { new Repository<ProfileModel>(_ctx), 1 }
+    };
+
+    public static readonly IEnumerable<object[]> _repositoriesWithValues = new List<object[]>()
+    {
+      new object[]
+      {
+        new Repository<AccountModel>(_ctx),
+        new AccountModel() { Id = 1 }
+      },
+      new object[]
+      {
+        new Repository<ProfileModel>(_ctx),
+        new ProfileModel() { Id = 1 }
+      }
     };
 
     [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    public void Test_Delete(int id)
+    [MemberData(nameof(_repositoriesWithValues))]
+    public async void Test_Repository_DeleteAsync<T>(Repository<T> repository, T entry) where T : class
     {
-      Func<bool> actual = () => { return _sut.Delete(id); };
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
 
-      Assert.IsType<Func<bool>>(actual);
+      try
+      {
+        var actual = _ctx.Set<T>();
+
+        await repository.InsertAsync(entry);
+        await _ctx.SaveChangesAsync();
+
+        await repository.DeleteAsync(1);
+        await _ctx.SaveChangesAsync();
+
+        Assert.Empty(await actual.ToListAsync());
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
 
     [Theory]
-    [MemberData(nameof(_objects))]
-    public void Test_Insert(object entity)
+    [MemberData(nameof(_repositoriesWithValues))]
+    public async void Test_Repository_InsertAsync<T>(Repository<T> repository, T entry) where T : class
     {
-      Func<bool> actual = () => { return _sut.Insert(entity); };
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
 
-      Assert.IsType<Func<bool>>(actual);
-    }
+      try
+      {
+        var actual = _ctx.Set<T>();
 
-    [Fact]
-    public void Test_Select()
-    {
-      Func<IEnumerable<object>> actual = () => { return _sut.Select(); };
+        await repository.InsertAsync(entry);
+        await _ctx.SaveChangesAsync();
 
-      Assert.IsType<Func<IEnumerable<object>>>(actual);
-    }
-
-    [Theory]
-    [InlineData(1)]
-    [InlineData(2)]
-    [InlineData(3)]
-    public void Test_SelectOne(int id)
-    {
-      Func<object> actual = () => { return _sut.Select(id); };
-
-      Assert.IsType<Func<object>>(actual);
+        Assert.NotEmpty(await actual.ToListAsync());
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
 
     [Theory]
-    [MemberData(nameof(_objects))]
-    public void Test_Update(object entity)
+    [MemberData(nameof(_repositories))]
+    public async void Test_Repository_SelectAsync<T>(Repository<T> repository) where T : class
     {
-      Func<bool> actual = () => { return _sut.Insert(entity); };
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
 
-      Assert.IsType<Func<bool>>(actual);
+      try
+      {
+        var actual = await repository.SelectAsync();
+
+        Assert.Empty(actual);
+      }
+      finally
+      {
+        _connection.Close();
+      }
+    }
+
+    [Theory]
+    [MemberData(nameof(_repositories))]
+    public async void Test_Repository_SelectAsync_ById<T>(Repository<T> repository) where T : class
+    {
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
+
+      try
+      {
+        var actual = await repository.SelectAsync(1);
+
+        Assert.Null(actual);
+      }
+      finally
+      {
+        _connection.Close();
+      }
+    }
+
+    [Theory]
+    [MemberData(nameof(_repositoriesWithValues))]
+    public async void Test_Repository_UpdateAsync<T>(Repository<T> repository, T entry) where T : class
+    {
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
+
+      try
+      {
+        await repository.InsertAsync(entry);
+        await _ctx.SaveChangesAsync();
+
+        var expected = (await _ctx.Set<T>().ToListAsync())[0];
+
+        repository.Update(entry);
+        await _ctx.SaveChangesAsync();
+
+        var actual = (await _ctx.Set<T>().ToListAsync())[0];
+
+        Assert.Equal(expected, actual);
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
   }
 }

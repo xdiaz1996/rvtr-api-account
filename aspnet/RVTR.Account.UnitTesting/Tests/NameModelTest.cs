@@ -16,7 +16,9 @@ namespace RVTR.Account.UnitTesting.Tests
         {
           Id = 0,
           Family = "family",
-          Given = "given"
+          Given = "given",
+          ProfileId = null,
+          Profile = null
         }
       }
     };

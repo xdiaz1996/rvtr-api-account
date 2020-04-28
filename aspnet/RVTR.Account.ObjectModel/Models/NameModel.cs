@@ -10,11 +10,13 @@ namespace RVTR.Account.ObjectModel.Models
   {
     public int Id { get; set; }
 
-    [Required]
     public string Family { get; set; }
 
-    [Required]
     public string Given { get; set; }
+
+    public int? ProfileId { get; set; }
+
+    public ProfileModel Profile { get; set; }
 
     /// <summary>
     /// Represents the _Name_ `Validate` method
