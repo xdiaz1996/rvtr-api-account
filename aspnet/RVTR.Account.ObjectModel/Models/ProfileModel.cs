@@ -10,14 +10,15 @@ namespace RVTR.Account.ObjectModel.Models
   {
     public int Id { get; set; }
 
-    [EmailAddress, Required]
     public string Email { get; set; }
 
-    [Required]
     public NameModel Name { get; set; }
 
-    [Phone, Required]
     public string Phone { get; set; }
+
+    public int? AccountId { get; set; }
+
+    public virtual AccountModel Account { get; set; }
 
     /// <summary>
     /// Represents the _Profile_ `Validate` method

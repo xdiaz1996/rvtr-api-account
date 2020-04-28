@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RVTR.Account.DataContext;
@@ -12,105 +13,144 @@ namespace RVTR.Account.UnitTesting.Tests
   {
     private static readonly SqliteConnection _connection = new SqliteConnection("Data Source=:memory:");
     private static readonly DbContextOptions<AccountContext> _options = new DbContextOptionsBuilder<AccountContext>().UseSqlite(_connection).Options;
-    private static readonly AccountContext _context = new AccountContext(_options);
+    private static readonly AccountContext _ctx = new AccountContext(_options);
 
-    public static readonly IEnumerable<object[]> _repositories = new List<object[]>
+    public static readonly IEnumerable<object[]> _repositories = new List<object[]>()
     {
-      new object[] { new Repository<AccountModel>(_context) },
-      new object[] { new Repository<ProfileModel>(_context) }
+      new object[] { new Repository<AccountModel>(_ctx) },
+      new object[] { new Repository<ProfileModel>(_ctx) }
     };
 
-    public static readonly IEnumerable<object[]> _repositoriesWithKey = new List<object[]>
+    public static readonly IEnumerable<object[]> _repositoriesWithKeys = new List<object[]>()
     {
-      new object[] { new Repository<AccountModel>(_context), 1 },
-      new object[] { new Repository<ProfileModel>(_context), 1 }
+      new object[] { new Repository<AccountModel>(_ctx), 1 },
+      new object[] { new Repository<ProfileModel>(_ctx), 1 }
     };
 
-    public static readonly IEnumerable<object[]> _repositoriesWithValue = new List<object[]>
+    public static readonly IEnumerable<object[]> _repositoriesWithValues = new List<object[]>()
     {
-      new object[] { new Repository<AccountModel>(_context), new AccountModel() { Id = 1 } },
-      new object[] { new Repository<ProfileModel>(_context), new ProfileModel() { Id = 1 } }
+      new object[]
+      {
+        new Repository<AccountModel>(_ctx),
+        new AccountModel() { Id = 1 }
+      },
+      new object[]
+      {
+        new Repository<ProfileModel>(_ctx),
+        new ProfileModel() { Id = 1 }
+      }
     };
 
-    public RepositoryTest()
+    [Theory]
+    [MemberData(nameof(_repositoriesWithValues))]
+    public async void Test_Repository_DeleteAsync<T>(Repository<T> repository, T entry) where T : class
     {
       _connection.Open();
-      _context.Database.EnsureCreated();
-    }
+      _ctx.Database.EnsureCreated();
 
-    ~RepositoryTest()
-    {
-      _connection.Close();
-    }
+      try
+      {
+        var actual = _ctx.Set<T>();
 
-    [Theory]
-    [MemberData(nameof(_repositoriesWithKey))]
-    public async void Test_Repository_Delete<T>(Repository<T> repository, int id) where T : class
-    {
-      var actual = await _context.Set<T>().ToListAsync();
+        await repository.InsertAsync(entry);
+        await _ctx.SaveChangesAsync();
 
-      await repository.DeleteAsync(id);
+        await repository.DeleteAsync(1);
+        await _ctx.SaveChangesAsync();
 
-      Assert.Empty(actual);
-
-    }
-
-    [Theory]
-    [MemberData(nameof(_repositoriesWithValue))]
-    public async void Test_Repository_InsertAsync_Valid<T>(Repository<T> repository, T entity) where T : class
-    {
-      var actual = await _context.Set<T>().ToListAsync();
-
-      await repository.InsertAsync(entity);
-
-      Assert.Empty(actual);
+        Assert.Empty(await actual.ToListAsync());
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
 
     [Theory]
-    [MemberData(nameof(_repositories))]
-    public async void Test_Repository_InsertAsync_Invalid<T>(Repository<T> repository) where T : class
+    [MemberData(nameof(_repositoriesWithValues))]
+    public async void Test_Repository_InsertAsync<T>(Repository<T> repository, T entry) where T : class
     {
-      var actual = await _context.Set<T>().ToListAsync();
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
 
-      await repository.InsertAsync(null);
+      try
+      {
+        var actual = _ctx.Set<T>();
 
-      Assert.Empty(actual);
+        await repository.InsertAsync(entry);
+        await _ctx.SaveChangesAsync();
+
+        Assert.NotEmpty(await actual.ToListAsync());
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
 
     [Theory]
     [MemberData(nameof(_repositories))]
     public async void Test_Repository_SelectAsync<T>(Repository<T> repository) where T : class
     {
-      var actual = await repository.SelectAsync();
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
 
-      Assert.Empty(actual);
-    }
+      try
+      {
+        var actual = await repository.SelectAsync();
 
-    [Theory]
-    [MemberData(nameof(_repositoriesWithKey))]
-    public async void Test_Repository_SelectAsync_Id_Valid<T>(Repository<T> repository, int id) where T : class
-    {
-      var actual = await repository.SelectAsync(id);
-
-      Assert.Null(actual);
+        Assert.Empty(actual);
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
 
     [Theory]
     [MemberData(nameof(_repositories))]
-    public async void Test_Repository_SelectAsync_Id_Invalid<T>(Repository<T> repository) where T : class
+    public async void Test_Repository_SelectAsync_ById<T>(Repository<T> repository) where T : class
     {
-      var actual = await repository.SelectAsync(0);
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
 
-      Assert.Null(actual);
+      try
+      {
+        var actual = await repository.SelectAsync(1);
+
+        Assert.Null(actual);
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
 
     [Theory]
-    [MemberData(nameof(_repositoriesWithValue))]
-    public void Test_Update<T>(Repository<T> repository, T entity) where T : class
+    [MemberData(nameof(_repositoriesWithValues))]
+    public async void Test_Repository_UpdateAsync<T>(Repository<T> repository, T entry) where T : class
     {
-      var actual = repository.Update(entity);
+      _connection.Open();
+      _ctx.Database.EnsureCreated();
 
-      Assert.Equal(actual, entity);
+      try
+      {
+        await repository.InsertAsync(entry);
+        await _ctx.SaveChangesAsync();
+
+        var expected = (await _ctx.Set<T>().ToListAsync())[0];
+
+        repository.Update(entry);
+        await _ctx.SaveChangesAsync();
+
+        var actual = (await _ctx.Set<T>().ToListAsync())[0];
+
+        Assert.Equal(expected, actual);
+      }
+      finally
+      {
+        _connection.Close();
+      }
     }
   }
 }

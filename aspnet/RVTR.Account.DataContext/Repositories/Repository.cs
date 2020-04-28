@@ -8,37 +8,23 @@ namespace RVTR.Account.DataContext.Repositories
   /// Represents the _Repository_ generic
   /// </summary>
   /// <typeparam name="TEntity"></typeparam>
-  public class Repository<TEntity> : IRepository<TEntity> where TEntity : class
+  public class Repository<TEntity> where TEntity : class
   {
-    private readonly DbSet<TEntity> _db;
+    public readonly DbSet<TEntity> _db;
 
     public Repository(AccountContext context)
     {
       _db = context.Set<TEntity>();
     }
 
-    public async Task DeleteAsync(int id)
-    {
-      var entry = await SelectAsync(id);
+    public async Task DeleteAsync(int id) => _db.Remove(await SelectAsync(id));
 
-      if (entry != null)
-      {
-        _db.Remove(entry);
-      }
-    }
-
-    public async Task InsertAsync(TEntity entry)
-    {
-      if (entry != null)
-      {
-        await _db.AddAsync(entry);
-      }
-    }
+    public async Task InsertAsync(TEntity entry) => await _db.AddAsync(entry).ConfigureAwait(true);
 
     public async Task<IEnumerable<TEntity>> SelectAsync() => await _db.ToListAsync();
 
-    public async Task<TEntity> SelectAsync(int id) => id > 0 ? await _db.FindAsync(id) : null;
+    public async Task<TEntity> SelectAsync(int id) => await _db.FindAsync(id).ConfigureAwait(true);
 
-    public TEntity Update(TEntity entry) => _db.Update(entry).Entity;
+    public void Update(TEntity entry) => _db.Update(entry);
   }
 }

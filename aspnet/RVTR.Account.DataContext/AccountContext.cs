@@ -21,9 +21,6 @@ namespace RVTR.Account.DataContext
       modelBuilder.Entity<NameModel>().HasKey(e => e.Id);
       modelBuilder.Entity<PaymentModel>().HasKey(e => e.Id);
       modelBuilder.Entity<ProfileModel>().HasKey(e => e.Id);
-
-      modelBuilder.Entity<AccountModel>().HasMany(e => e.Profiles).WithOne();
-      modelBuilder.Entity<AccountModel>().HasMany(e => e.Payments).WithOne();
     }
   }
 }
