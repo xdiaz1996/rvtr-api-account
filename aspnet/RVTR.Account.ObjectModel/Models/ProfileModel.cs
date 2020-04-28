@@ -19,6 +19,8 @@ namespace RVTR.Account.ObjectModel.Models
     [Phone, Required]
     public string Phone { get; set; }
 
+    public ICollection<AccountProfileModel> AccountProfiles { get; set; }
+
     /// <summary>
     /// Represents the _Profile_ `Validate` method
     /// </summary>

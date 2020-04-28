@@ -1,13 +1,14 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RVTR.Account.DataContext.Repositories
 {
   public interface IRepository<TEntity> where TEntity : class
   {
-    bool Delete(int id);
-    bool Insert(TEntity entry);
-    IEnumerable<TEntity> Select();
-    TEntity Select(int id);
-    bool Update(TEntity entry);
+    Task DeleteAsync(int id);
+    Task InsertAsync(TEntity entry);
+    Task<IEnumerable<TEntity>> SelectAsync();
+    Task<TEntity> SelectAsync(int id);
+    TEntity Update(TEntity entry);
   }
 }

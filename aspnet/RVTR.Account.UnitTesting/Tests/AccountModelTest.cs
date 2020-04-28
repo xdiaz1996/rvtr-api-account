@@ -17,8 +17,7 @@ namespace RVTR.Account.UnitTesting.Tests
           Id = 0,
           Address = new AddressModel(),
           Name = "name",
-          Payments = new List<PaymentModel>(),
-          Profiles = new List<ProfileModel>()
+          Payments = new List<PaymentModel>()
         }
       }
     };
