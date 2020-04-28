@@ -57,11 +57,22 @@ namespace RVTR.Account.UnitTesting.Tests
 
     [Theory]
     [MemberData(nameof(_repositoriesWithValue))]
-    public async void Test_Repository_Insert<T>(Repository<T> repository, T entity) where T : class
+    public async void Test_Repository_InsertAsync_Valid<T>(Repository<T> repository, T entity) where T : class
     {
       var actual = await _context.Set<T>().ToListAsync();
 
       await repository.InsertAsync(entity);
+
+      Assert.Empty(actual);
+    }
+
+    [Theory]
+    [MemberData(nameof(_repositories))]
+    public async void Test_Repository_InsertAsync_Invalid<T>(Repository<T> repository) where T : class
+    {
+      var actual = await _context.Set<T>().ToListAsync();
+
+      await repository.InsertAsync(null);
 
       Assert.Empty(actual);
     }
@@ -77,9 +88,18 @@ namespace RVTR.Account.UnitTesting.Tests
 
     [Theory]
     [MemberData(nameof(_repositoriesWithKey))]
-    public async void Test_Repository_SelectById<T>(Repository<T> repository, int id) where T : class
+    public async void Test_Repository_SelectAsync_Id_Valid<T>(Repository<T> repository, int id) where T : class
     {
       var actual = await repository.SelectAsync(id);
+
+      Assert.Null(actual);
+    }
+
+    [Theory]
+    [MemberData(nameof(_repositories))]
+    public async void Test_Repository_SelectAsync_Id_Invalid<T>(Repository<T> repository) where T : class
+    {
+      var actual = await repository.SelectAsync(0);
 
       Assert.Null(actual);
     }
