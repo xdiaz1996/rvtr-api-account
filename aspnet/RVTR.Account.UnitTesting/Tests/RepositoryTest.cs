@@ -47,18 +47,19 @@ namespace RVTR.Account.UnitTesting.Tests
     [MemberData(nameof(_repositoriesWithKey))]
     public async void Test_Repository_Delete<T>(Repository<T> repository, int id) where T : class
     {
-      var actual = await _context.Accounts.ToListAsync();
+      var actual = await _context.Set<T>().ToListAsync();
 
       await repository.DeleteAsync(id);
 
       Assert.Empty(actual);
+
     }
 
     [Theory]
     [MemberData(nameof(_repositoriesWithValue))]
     public async void Test_Repository_Insert<T>(Repository<T> repository, T entity) where T : class
     {
-      var actual = await _context.Accounts.ToListAsync();
+      var actual = await _context.Set<T>().ToListAsync();
 
       await repository.InsertAsync(entity);
 
