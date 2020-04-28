@@ -17,7 +17,7 @@ namespace RVTR.Account.ObjectModel.Models
 
     public IEnumerable<PaymentModel> Payments { get; set; }
 
-    public ICollection<AccountProfileModel> AccountProfiles { get; set; }
+    public IEnumerable<ProfileModel> Profiles { get; set; }
 
     /// <summary>
     /// Represents the _Account_ `Validate` method

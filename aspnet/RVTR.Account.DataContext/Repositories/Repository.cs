@@ -1,10 +1,6 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using RVTR.Account.ObjectModel.Models;
 
 namespace RVTR.Account.DataContext.Repositories
 {
@@ -23,22 +19,20 @@ namespace RVTR.Account.DataContext.Repositories
 
     public async Task DeleteAsync(int id)
     {
-      try
+      var entity = await SelectAsync(id);
+
+      if (entity != null)
       {
-        _db.Remove(await SelectAsync(id));
-      }
-      catch
-      {
-        return;
+        _db.Remove(entity);
       }
     }
 
-    public async Task InsertAsync(TEntity entity) => await _db.AddAsync(entity);
+    public async Task InsertAsync(TEntity entry) => await _db.AddAsync(entry);
 
     public async Task<IEnumerable<TEntity>> SelectAsync() => await _db.ToListAsync();
 
     public async Task<TEntity> SelectAsync(int id) => await _db.FindAsync(id);
 
-    public TEntity Update(TEntity entity) => _db.Update(entity).Entity;
+    public TEntity Update(TEntity entry) => _db.Update(entry).Entity;
   }
 }

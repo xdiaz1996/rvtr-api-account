@@ -16,15 +16,14 @@ namespace RVTR.Account.DataContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<AccountModel>().HasKey(e => e.Id);
-      modelBuilder.Entity<AccountProfileModel>().HasKey(e => e.Id);
       modelBuilder.Entity<AddressModel>().HasKey(e => e.Id);
       modelBuilder.Entity<BankCardModel>().HasKey(e => e.Id);
       modelBuilder.Entity<NameModel>().HasKey(e => e.Id);
       modelBuilder.Entity<PaymentModel>().HasKey(e => e.Id);
       modelBuilder.Entity<ProfileModel>().HasKey(e => e.Id);
 
-      modelBuilder.Entity<AccountProfileModel>().HasOne(e => e.Account).WithMany(e => e.AccountProfiles).HasForeignKey(e => e.AccountId);
-      modelBuilder.Entity<AccountProfileModel>().HasOne(e => e.Profile).WithMany(e => e.AccountProfiles).HasForeignKey(e => e.ProfileId);
+      modelBuilder.Entity<AccountModel>().HasMany(e => e.Profiles).WithOne();
+      modelBuilder.Entity<AccountModel>().HasMany(e => e.Payments).WithOne();
     }
   }
 }
