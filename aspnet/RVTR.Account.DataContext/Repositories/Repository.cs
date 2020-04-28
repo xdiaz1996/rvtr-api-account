@@ -19,19 +19,25 @@ namespace RVTR.Account.DataContext.Repositories
 
     public async Task DeleteAsync(int id)
     {
-      var entity = await SelectAsync(id);
+      var entry = await SelectAsync(id);
 
-      if (entity != null)
+      if (entry != null)
       {
-        _db.Remove(entity);
+        _db.Remove(entry);
       }
     }
 
-    public async Task InsertAsync(TEntity entry) => await _db.AddAsync(entry);
+    public async Task InsertAsync(TEntity entry)
+    {
+      if (entry != null)
+      {
+        await _db.AddAsync(entry);
+      }
+    }
 
     public async Task<IEnumerable<TEntity>> SelectAsync() => await _db.ToListAsync();
 
-    public async Task<TEntity> SelectAsync(int id) => await _db.FindAsync(id);
+    public async Task<TEntity> SelectAsync(int id) => id > 0 ? await _db.FindAsync(id) : null;
 
     public TEntity Update(TEntity entry) => _db.Update(entry).Entity;
   }
