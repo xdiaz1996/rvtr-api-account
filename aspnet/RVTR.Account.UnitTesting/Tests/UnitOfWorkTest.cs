@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using RVTR.Account.DataContext;
@@ -12,19 +10,33 @@ namespace RVTR.Account.UnitTesting.Tests
   {
     private static readonly SqliteConnection _connection = new SqliteConnection("Data Source=:memory:");
     private static readonly DbContextOptions<AccountContext> _options = new DbContextOptionsBuilder<AccountContext>().UseSqlite(_connection).Options;
-    private static readonly AccountContext _context = new AccountContext(_options);
-    public static readonly IEnumerable<object[]> _unitOfWorks = new List<object[]>
-    {
-      new object[] { new UnitOfWork(_context) }
-    };
 
-    [Theory]
-    [MemberData(nameof(_unitOfWorks))]
-    public async void Test_UnitOfWork_CommitAsync(UnitOfWork unitOfWork)
+    [Fact]
+    public async void Test_UnitOfWork_CommitAsync()
     {
-      var actual = await unitOfWork.CommitAsync();
+      await _connection.OpenAsync();
 
-      Assert.True(actual >= 0);
+      try
+      {
+        using (var ctx = new AccountContext(_options))
+        {
+          await ctx.Database.EnsureCreatedAsync();
+        }
+
+        using (var ctx = new AccountContext(_options))
+        {
+          var unitOfWork = new UnitOfWork(ctx);
+          var actual = await unitOfWork.CommitAsync();
+
+          Assert.NotNull(unitOfWork.Account);
+          Assert.NotNull(unitOfWork.Profile);
+          Assert.Equal(0, actual);
+        }
+      }
+      finally
+      {
+        await _connection.CloseAsync();
+      }
     }
   }
 }

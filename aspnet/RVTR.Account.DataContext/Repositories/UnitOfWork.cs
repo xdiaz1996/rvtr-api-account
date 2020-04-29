@@ -16,6 +16,9 @@ namespace RVTR.Account.DataContext.Repositories
     public UnitOfWork(AccountContext context)
     {
       _context = context;
+
+      Account = new Repository<AccountModel>(context);
+      Profile = new Repository<ProfileModel>(context);
     }
 
     /// <summary>
