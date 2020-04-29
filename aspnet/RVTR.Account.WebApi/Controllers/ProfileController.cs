@@ -58,29 +58,29 @@ namespace RVTR.Account.WebApi.Controllers
 
     public async Task<IActionResult> Post(ProfileModel profile)
     {
-      if (ModelState.IsValid)
+      if (profile == null)
       {
-        await _unitOfWork.Profile.InsertAsync(profile);
-        await _unitOfWork.CommitAsync();
-
-        return Accepted(profile);
+        return BadRequest(profile);
       }
 
-      return BadRequest(profile);
+      await _unitOfWork.Profile.InsertAsync(profile);
+      await _unitOfWork.CommitAsync();
+
+      return Accepted(profile);
     }
 
     [HttpPut]
     public async Task<IActionResult> Put(ProfileModel profile)
     {
-      if (ModelState.IsValid)
+      if (profile == null)
       {
-        _unitOfWork.Profile.Update(profile);
-        await _unitOfWork.CommitAsync();
-
-        return Accepted(profile);
+        return BadRequest(profile);
       }
 
-      return BadRequest(profile);
+      _unitOfWork.Profile.Update(profile);
+      await _unitOfWork.CommitAsync();
+
+      return Accepted(profile);
     }
   }
 }

@@ -13,34 +13,34 @@ using Xunit;
 
 namespace RVTR.Account.UnitTesting.Tests
 {
-  public class AccountControllerTest
+  public class ProfileControllerTest
   {
     private static readonly SqliteConnection _connection = new SqliteConnection("Data Source=:memory:");
     private static readonly DbContextOptions<AccountContext> _options = new DbContextOptionsBuilder<AccountContext>().UseSqlite(_connection).Options;
-    private readonly AccountController _controller;
-    private readonly ILogger<AccountController> _logger;
+    private readonly ProfileController _controller;
+    private readonly ILogger<ProfileController> _logger;
     private readonly UnitOfWork _unitOfWork;
 
-    public AccountControllerTest()
+    public ProfileControllerTest()
     {
       var contextMock = new Mock<AccountContext>(_options);
-      var loggerMock = new Mock<ILogger<AccountController>>();
-      var repositoryMock = new Mock<Repository<AccountModel>>(new AccountContext(_options));
+      var loggerMock = new Mock<ILogger<ProfileController>>();
+      var repositoryMock = new Mock<Repository<ProfileModel>>(new AccountContext(_options));
       var unitOfWorkMock = new Mock<UnitOfWork>(contextMock.Object);
 
       repositoryMock.Setup(m => m.DeleteAsync(0)).Throws(new Exception());
       repositoryMock.Setup(m => m.DeleteAsync(1)).Returns(Task.FromResult(1));
-      repositoryMock.Setup(m => m.InsertAsync(It.IsAny<AccountModel>())).Returns(Task.FromResult<AccountModel>(null));
-      repositoryMock.Setup(m => m.SelectAsync()).Returns(Task.FromResult<IEnumerable<AccountModel>>(null));
+      repositoryMock.Setup(m => m.InsertAsync(It.IsAny<ProfileModel>())).Returns(Task.FromResult<ProfileModel>(null));
+      repositoryMock.Setup(m => m.SelectAsync()).Returns(Task.FromResult<IEnumerable<ProfileModel>>(null));
       repositoryMock.Setup(m => m.SelectAsync(0)).Throws(new Exception());
-      repositoryMock.Setup(m => m.SelectAsync(1)).Returns(Task.FromResult<AccountModel>(null));
-      repositoryMock.Setup(m => m.Update(new AccountModel() { Id = 0 })).Throws(new Exception());
-      repositoryMock.Setup(m => m.Update(new AccountModel() { Id = 1 }));
-      unitOfWorkMock.Setup(m => m.Account).Returns(repositoryMock.Object);
+      repositoryMock.Setup(m => m.SelectAsync(1)).Returns(Task.FromResult<ProfileModel>(null));
+      repositoryMock.Setup(m => m.Update(new ProfileModel() { Id = 0 })).Throws(new Exception());
+      repositoryMock.Setup(m => m.Update(new ProfileModel() { Id = 1 }));
+      unitOfWorkMock.Setup(m => m.Profile).Returns(repositoryMock.Object);
 
       _logger = loggerMock.Object;
       _unitOfWork = unitOfWorkMock.Object;
-      _controller = new AccountController(_logger, _unitOfWork);
+      _controller = new ProfileController(_logger, _unitOfWork);
     }
 
     [Fact]
@@ -68,8 +68,8 @@ namespace RVTR.Account.UnitTesting.Tests
     [Fact]
     public async void Test_Controller_Post()
     {
-      var resultFail = await _controller.Post(new AccountModel() { Id = 0 });
-      var resultPass = await _controller.Post(new AccountModel() { Id = 1 });
+      var resultFail = await _controller.Post(new ProfileModel() { Id = 0 });
+      var resultPass = await _controller.Post(new ProfileModel() { Id = 1 });
 
       Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);
@@ -78,8 +78,8 @@ namespace RVTR.Account.UnitTesting.Tests
     [Fact]
     public async void Test_Controller_Put()
     {
-      var resultFail = await _controller.Put(new AccountModel() { Id = 0 });
-      var resultPass = await _controller.Put(new AccountModel() { Id = 1 });
+      var resultFail = await _controller.Put(new ProfileModel() { Id = 0 });
+      var resultPass = await _controller.Put(new ProfileModel() { Id = 1 });
 
       Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);

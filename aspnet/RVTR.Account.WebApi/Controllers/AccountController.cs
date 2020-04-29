@@ -22,7 +22,7 @@ namespace RVTR.Account.WebApi.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteAsync(int id)
+    public async Task<IActionResult> Delete(int id)
     {
       try
       {
@@ -58,29 +58,29 @@ namespace RVTR.Account.WebApi.Controllers
 
     public async Task<IActionResult> Post(AccountModel account)
     {
-      if (ModelState.IsValid)
+      if (account == null)
       {
-        await _unitOfWork.Account.InsertAsync(account);
-        await _unitOfWork.CommitAsync();
-
-        return Accepted(account);
+        return BadRequest(account);
       }
 
-      return BadRequest(account);
+      await _unitOfWork.Account.InsertAsync(account);
+      await _unitOfWork.CommitAsync();
+
+      return Accepted(account);
     }
 
     [HttpPut]
     public async Task<IActionResult> Put(AccountModel account)
     {
-      if (ModelState.IsValid)
+      if (account == null)
       {
-        _unitOfWork.Account.Update(account);
-        await _unitOfWork.CommitAsync();
-
-        return Accepted(account);
+        return BadRequest(account);
       }
 
-      return BadRequest(account);
+      _unitOfWork.Account.Update(account);
+      await _unitOfWork.CommitAsync();
+
+      return Accepted(account);
     }
   }
 }
