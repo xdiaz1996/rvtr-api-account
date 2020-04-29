@@ -1,0 +1,62 @@
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Moq;
+using RVTR.Account.DataContext;
+using RVTR.Account.DataContext.Repositories;
+using RVTR.Account.ObjectModel.Models;
+using RVTR.Account.WebApi.Controllers;
+using Xunit;
+
+namespace RVTR.Account.UnitTesting.Tests
+{
+  public class AccountControllerTest
+  {
+    private static readonly SqliteConnection _connection = new SqliteConnection("Data Source=:memory:");
+    private static readonly DbContextOptions<AccountContext> _options = new DbContextOptionsBuilder<AccountContext>().UseSqlite(_connection).Options;
+    private readonly AccountController _controller;
+    private readonly ILogger<AccountController> _logger;
+    private readonly UnitOfWork _unitOfWork;
+
+    public AccountControllerTest()
+    {
+      var contextMock = new Mock<AccountContext>(_options);
+      var loggerMock = new Mock<ILogger<AccountController>>();
+      var repositoryMock = new Mock<Repository<AccountModel>>(new AccountContext(_options));
+      var unitOfWorkMock = new Mock<UnitOfWork>(contextMock.Object);
+
+      repositoryMock.Setup(m => m.DeleteAsync(0)).Throws(new Exception());
+      repositoryMock.Setup(m => m.DeleteAsync(1)).Returns(Task.FromResult(1));
+      repositoryMock.Setup(m => m.SelectAsync()).Returns(Task.FromResult<IEnumerable<AccountModel>>(null));
+      repositoryMock.Setup(m => m.SelectAsync(It.IsAny<int>())).Returns(Task.FromResult<AccountModel>(null));
+      unitOfWorkMock.Setup(m => m.Account).Returns(repositoryMock.Object);
+
+      _logger = loggerMock.Object;
+      _unitOfWork = unitOfWorkMock.Object;
+      _controller = new AccountController(_logger, _unitOfWork);
+    }
+
+    [Fact]
+    public async void Test_Controller_Delete()
+    {
+      var resultFail = await _controller.DeleteAsync(0);
+      var resultPass = await _controller.DeleteAsync(1);
+
+      Assert.NotNull(resultFail);
+      Assert.NotNull(resultPass);
+    }
+
+    [Fact]
+    public async void Test_Controller_Get()
+    {
+      var resultMany = await _controller.Get();
+      var resultOne = await _controller.Get(1);
+
+      Assert.NotNull(resultMany);
+      Assert.NotNull(resultOne);
+    }
+  }
+}
