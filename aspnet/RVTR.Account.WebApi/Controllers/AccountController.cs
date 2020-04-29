@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +9,7 @@ namespace RVTR.Account.WebApi.Controllers
 {
   [ApiController]
   [EnableCors()]
-  [Route("[controller]")]
+  [Route("api/[controller]")]
   public class AccountController : ControllerBase
   {
     private readonly ILogger<AccountController> _logger;
@@ -24,10 +21,66 @@ namespace RVTR.Account.WebApi.Controllers
       _unitOfWork = unitOfWork;
     }
 
-    [HttpGet]
-    public async Task<AccountModel> Get()
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(int id)
     {
-      return await Task.FromResult<AccountModel>(new AccountModel());
+      try
+      {
+        await _unitOfWork.Account.DeleteAsync(id);
+        await _unitOfWork.CommitAsync();
+
+        return Ok();
+      }
+      catch
+      {
+        return NotFound(id);
+      }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Get()
+    {
+      return Ok(await _unitOfWork.Account.SelectAsync());
+    }
+
+    [HttpGet("{id")]
+    public async Task<IActionResult> Get(int id)
+    {
+      try
+      {
+        return Ok(await _unitOfWork.Account.SelectAsync(id));
+      }
+      catch
+      {
+        return NotFound(id);
+      }
+    }
+
+    public async Task<IActionResult> Post(AccountModel account)
+    {
+      if (ModelState.IsValid)
+      {
+        await _unitOfWork.Account.InsertAsync(account);
+        await _unitOfWork.CommitAsync();
+
+        return Accepted(account);
+      }
+
+      return BadRequest(account);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> Put(AccountModel account)
+    {
+      if (ModelState.IsValid)
+      {
+        _unitOfWork.Account.Update(account);
+        await _unitOfWork.CommitAsync();
+
+        return Accepted(account);
+      }
+
+      return BadRequest(account);
     }
   }
 }
