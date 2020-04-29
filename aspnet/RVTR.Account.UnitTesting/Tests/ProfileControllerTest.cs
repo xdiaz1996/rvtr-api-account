@@ -34,8 +34,7 @@ namespace RVTR.Account.UnitTesting.Tests
       repositoryMock.Setup(m => m.SelectAsync()).Returns(Task.FromResult<IEnumerable<ProfileModel>>(null));
       repositoryMock.Setup(m => m.SelectAsync(0)).Throws(new Exception());
       repositoryMock.Setup(m => m.SelectAsync(1)).Returns(Task.FromResult<ProfileModel>(null));
-      repositoryMock.Setup(m => m.Update(new ProfileModel() { Id = 0 })).Throws(new Exception());
-      repositoryMock.Setup(m => m.Update(new ProfileModel() { Id = 1 }));
+      repositoryMock.Setup(m => m.Update(It.IsAny<ProfileModel>()));
       unitOfWorkMock.Setup(m => m.Profile).Returns(repositoryMock.Object);
 
       _logger = loggerMock.Object;
@@ -68,8 +67,8 @@ namespace RVTR.Account.UnitTesting.Tests
     [Fact]
     public async void Test_Controller_Post()
     {
-      var resultFail = await _controller.Post(new ProfileModel() { Id = 0 });
-      var resultPass = await _controller.Post(new ProfileModel() { Id = 1 });
+      var resultFail = await _controller.Post(null);
+      var resultPass = await _controller.Post(new ProfileModel());
 
       Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);
@@ -78,8 +77,8 @@ namespace RVTR.Account.UnitTesting.Tests
     [Fact]
     public async void Test_Controller_Put()
     {
-      var resultFail = await _controller.Put(new ProfileModel() { Id = 0 });
-      var resultPass = await _controller.Put(new ProfileModel() { Id = 1 });
+      var resultFail = await _controller.Put(null);
+      var resultPass = await _controller.Put(new ProfileModel());
 
       Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);
