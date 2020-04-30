@@ -17,8 +17,8 @@ namespace RVTR.Account.UnitTesting.Tests
     {
       new object[]
       {
-        new AccountModel() { Id = 1 },
-        new ProfileModel() { Id = 1 },
+        new AccountModel() { Id = 1, Name = "name" },
+        new ProfileModel() { Id = 1, Email = "email" },
       }
     };
 

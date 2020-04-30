@@ -68,7 +68,7 @@ namespace RVTR.Account.UnitTesting.Tests
     public async void Test_Controller_Post()
     {
       var resultFail = await _controller.Post(null);
-      var resultPass = await _controller.Post(new AccountModel());
+      var resultPass = await _controller.Post(new AccountModel() { Id = 1, Name = "name" });
 
       Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);
@@ -78,7 +78,7 @@ namespace RVTR.Account.UnitTesting.Tests
     public async void Test_Controller_Put()
     {
       var resultFail = await _controller.Put(null);
-      var resultPass = await _controller.Put(new AccountModel());
+      var resultPass = await _controller.Put(new AccountModel() { Id = 1, Name = "name" });
 
       Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);

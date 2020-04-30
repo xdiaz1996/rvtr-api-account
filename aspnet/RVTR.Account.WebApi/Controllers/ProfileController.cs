@@ -56,31 +56,32 @@ namespace RVTR.Account.WebApi.Controllers
       }
     }
 
+    [HttpPost]
     public async Task<IActionResult> Post(ProfileModel profile)
     {
-      if (profile == null)
+      if (ModelState.IsValid)
       {
-        return BadRequest(profile);
+        await _unitOfWork.Profile.InsertAsync(profile);
+        await _unitOfWork.CommitAsync();
+
+        return Accepted(profile);
       }
 
-      await _unitOfWork.Profile.InsertAsync(profile);
-      await _unitOfWork.CommitAsync();
-
-      return Accepted(profile);
+      return BadRequest(profile);
     }
 
     [HttpPut]
     public async Task<IActionResult> Put(ProfileModel profile)
     {
-      if (profile == null)
+      if (ModelState.IsValid)
       {
-        return BadRequest(profile);
+        _unitOfWork.Profile.Update(profile);
+        await _unitOfWork.CommitAsync();
+
+        return Accepted(profile);
       }
 
-      _unitOfWork.Profile.Update(profile);
-      await _unitOfWork.CommitAsync();
-
-      return Accepted(profile);
+      return BadRequest(profile);
     }
   }
 }

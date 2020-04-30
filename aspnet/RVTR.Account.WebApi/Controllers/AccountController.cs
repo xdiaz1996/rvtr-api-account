@@ -56,31 +56,32 @@ namespace RVTR.Account.WebApi.Controllers
       }
     }
 
+    [HttpPost]
     public async Task<IActionResult> Post(AccountModel account)
     {
-      if (account == null)
+      if (ModelState.IsValid)
       {
-        return BadRequest(account);
+        await _unitOfWork.Account.InsertAsync(account);
+        await _unitOfWork.CommitAsync();
+
+        return Accepted(account);
       }
 
-      await _unitOfWork.Account.InsertAsync(account);
-      await _unitOfWork.CommitAsync();
-
-      return Accepted(account);
+      return BadRequest(account);
     }
 
     [HttpPut]
     public async Task<IActionResult> Put(AccountModel account)
     {
-      if (account == null)
+      if (ModelState.IsValid)
       {
-        return BadRequest(account);
+        _unitOfWork.Account.Update(account);
+        await _unitOfWork.CommitAsync();
+
+        return Accepted(account);
       }
 
-      _unitOfWork.Account.Update(account);
-      await _unitOfWork.CommitAsync();
-
-      return Accepted(account);
+      return BadRequest(account);
     }
   }
 }
