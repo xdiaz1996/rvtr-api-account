@@ -10,12 +10,12 @@ namespace RVTR.Account.WebApi.Controllers
   [ApiController]
   [EnableCors()]
   [Route("api/[controller]")]
-  public class AccountController : ControllerBase
+  public class ProfileController : ControllerBase
   {
-    private readonly ILogger<AccountController> _logger;
+    private readonly ILogger<ProfileController> _logger;
     private readonly UnitOfWork _unitOfWork;
 
-    public AccountController(ILogger<AccountController> logger, UnitOfWork unitOfWork)
+    public ProfileController(ILogger<ProfileController> logger, UnitOfWork unitOfWork)
     {
       _logger = logger;
       _unitOfWork = unitOfWork;
@@ -26,7 +26,7 @@ namespace RVTR.Account.WebApi.Controllers
     {
       try
       {
-        await _unitOfWork.Account.DeleteAsync(id);
+        await _unitOfWork.Profile.DeleteAsync(id);
         await _unitOfWork.CommitAsync();
 
         return Ok();
@@ -40,7 +40,7 @@ namespace RVTR.Account.WebApi.Controllers
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-      return Ok(await _unitOfWork.Account.SelectAsync());
+      return Ok(await _unitOfWork.Profile.SelectAsync());
     }
 
     [HttpGet("{id")]
@@ -48,7 +48,7 @@ namespace RVTR.Account.WebApi.Controllers
     {
       try
       {
-        return Ok(await _unitOfWork.Account.SelectAsync(id));
+        return Ok(await _unitOfWork.Profile.SelectAsync(id));
       }
       catch
       {
@@ -57,21 +57,21 @@ namespace RVTR.Account.WebApi.Controllers
     }
 
     [HttpPost]
-    public async Task<IActionResult> Post(AccountModel account)
+    public async Task<IActionResult> Post(ProfileModel profile)
     {
-      await _unitOfWork.Account.InsertAsync(account);
+      await _unitOfWork.Profile.InsertAsync(profile);
       await _unitOfWork.CommitAsync();
 
-      return Accepted(account);
+      return Accepted(profile);
     }
 
     [HttpPut]
-    public async Task<IActionResult> Put(AccountModel account)
+    public async Task<IActionResult> Put(ProfileModel profile)
     {
-      _unitOfWork.Account.Update(account);
+      _unitOfWork.Profile.Update(profile);
       await _unitOfWork.CommitAsync();
 
-      return Accepted(account);
+      return Accepted(profile);
     }
   }
 }
