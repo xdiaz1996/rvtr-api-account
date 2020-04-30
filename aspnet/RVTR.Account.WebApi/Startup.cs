@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
+using RVTR.Account.DataContext;
 using RVTR.Account.DataContext.Repositories;
 
 namespace RVTR.Account.WebApi
@@ -19,6 +22,7 @@ namespace RVTR.Account.WebApi
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddControllers();
+      services.AddDbContext<AccountContext>(options => options.UseNpgsql(Configuration.GetConnectionString("pgsql")));
 
       services.AddCors(cors =>
       {
@@ -31,6 +35,14 @@ namespace RVTR.Account.WebApi
       });
 
       services.AddScoped<UnitOfWork>();
+      services.AddSwaggerGen(docs =>
+      {
+        docs.SwaggerDoc("v0", new OpenApiInfo()
+        {
+          Title = "Account API",
+          Version = "0.0.0"
+        });
+      });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,6 +53,12 @@ namespace RVTR.Account.WebApi
       }
 
       app.UseHttpsRedirection();
+
+      app.UseSwagger();
+      app.UseSwaggerUI(urls =>
+      {
+        urls.SwaggerEndpoint("/swagger/v0/swagger.json", "v0");
+      });
       app.UseRouting();
       app.UseAuthorization();
 

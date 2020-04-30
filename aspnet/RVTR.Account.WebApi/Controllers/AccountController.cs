@@ -43,7 +43,7 @@ namespace RVTR.Account.WebApi.Controllers
       return Ok(await _unitOfWork.Account.SelectAsync());
     }
 
-    [HttpGet("{id")]
+    [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
       try
