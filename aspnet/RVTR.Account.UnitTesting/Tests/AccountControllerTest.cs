@@ -30,13 +30,11 @@ namespace RVTR.Account.UnitTesting.Tests
 
       repositoryMock.Setup(m => m.DeleteAsync(0)).Throws(new Exception());
       repositoryMock.Setup(m => m.DeleteAsync(1)).Returns(Task.FromResult(1));
-      repositoryMock.Setup(m => m.InsertAsync(null)).Throws(new Exception());
-      repositoryMock.Setup(m => m.InsertAsync(new AccountModel() { Id = 1, Name = "name" })).Returns(Task.FromResult<AccountModel>(null));
+      repositoryMock.Setup(m => m.InsertAsync(It.IsAny<AccountModel>())).Returns(Task.FromResult<AccountModel>(null));
       repositoryMock.Setup(m => m.SelectAsync()).Returns(Task.FromResult<IEnumerable<AccountModel>>(null));
       repositoryMock.Setup(m => m.SelectAsync(0)).Throws(new Exception());
       repositoryMock.Setup(m => m.SelectAsync(1)).Returns(Task.FromResult<AccountModel>(null));
-      repositoryMock.Setup(m => m.Update(null)).Throws(new Exception());
-      repositoryMock.Setup(m => m.Update(new AccountModel() { Id = 1, Name = "name" }));
+      repositoryMock.Setup(m => m.Update(It.IsAny<AccountModel>()));
       unitOfWorkMock.Setup(m => m.Account).Returns(repositoryMock.Object);
 
       _logger = loggerMock.Object;
@@ -69,20 +67,16 @@ namespace RVTR.Account.UnitTesting.Tests
     [Fact]
     public async void Test_Controller_Post()
     {
-      var resultFail = await _controller.Post(null);
-      var resultPass = await _controller.Post(new AccountModel() { Id = 1, Name = "name" });
+      var resultPass = await _controller.Post(new AccountModel());
 
-      Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);
     }
 
     [Fact]
     public async void Test_Controller_Put()
     {
-      var resultFail = await _controller.Put(null);
-      var resultPass = await _controller.Put(new AccountModel() { Id = 1, Name = "name" });
+      var resultPass = await _controller.Put(new AccountModel());
 
-      Assert.NotNull(resultFail);
       Assert.NotNull(resultPass);
     }
   }
