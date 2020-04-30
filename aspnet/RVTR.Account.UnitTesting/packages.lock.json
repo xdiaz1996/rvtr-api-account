@@ -10,7 +10,7 @@
       },
       "Microsoft.EntityFrameworkCore.Sqlite": {
         "type": "Direct",
-        "requested": "[*, )",
+        "requested": "[3.1.3, )",
         "resolved": "3.1.3",
         "contentHash": "xRggLUP5O68OcpvdMorga429G9tYVb0JZOX/w779kLKbNPbCLxvr8e39xdY4EivLSBtedXr/HY2GEkKhBRilkA==",
         "dependencies": {
@@ -30,7 +30,7 @@
       },
       "Moq": {
         "type": "Direct",
-        "requested": "[*, )",
+        "requested": "[4.14.1, )",
         "resolved": "4.14.1",
         "contentHash": "yRrU+cLNBtZpL9eLVyicOENMPUx7DjOOB+VPgDhrXaCjhfob661d4HJ82YJpPUBmlYoivNA8F4R+NIMfoKbD7g==",
         "dependencies": {
@@ -1598,7 +1598,7 @@
           "RVTR.Account.DataContext": "1.0.0",
           "RVTR.Account.ObjectModel": "1.0.0",
           "npgsql.entityframeworkcore.postgresql": "3.1.3",
-          "swashbuckle.aspnetcore": "0.0.0"
+          "swashbuckle.aspnetcore": "5.4.1"
         }
       },
       "rvtr.account.webrpc": {

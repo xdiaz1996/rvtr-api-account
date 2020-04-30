@@ -16,7 +16,7 @@
       },
       "Swashbuckle.AspNetCore": {
         "type": "Direct",
-        "requested": "[*, )",
+        "requested": "[5.4.1, )",
         "resolved": "5.4.1",
         "contentHash": "5EA++Cg8nzw1GCOM+7gWqrXJtylH8XMu+ixkFrbRIhRSMiZLzVPCFnSgAvJn+hCyi+AipUoJbBYv1BjvugieSw==",
         "dependencies": {

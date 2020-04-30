@@ -7,6 +7,9 @@ using RVTR.Account.ObjectModel.Models;
 
 namespace RVTR.Account.WebApi.Controllers
 {
+  /// <summary>
+  ///
+  /// </summary>
   [ApiController]
   [EnableCors()]
   [Route("api/[controller]")]
@@ -15,12 +18,22 @@ namespace RVTR.Account.WebApi.Controllers
     private readonly ILogger<ProfileController> _logger;
     private readonly UnitOfWork _unitOfWork;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="unitOfWork"></param>
     public ProfileController(ILogger<ProfileController> logger, UnitOfWork unitOfWork)
     {
       _logger = logger;
       _unitOfWork = unitOfWork;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -37,12 +50,21 @@ namespace RVTR.Account.WebApi.Controllers
       }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> Get()
     {
       return Ok(await _unitOfWork.Profile.SelectAsync());
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
@@ -56,6 +78,11 @@ namespace RVTR.Account.WebApi.Controllers
       }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="profile"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Post(ProfileModel profile)
     {
@@ -65,6 +92,11 @@ namespace RVTR.Account.WebApi.Controllers
       return Accepted(profile);
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="profile"></param>
+    /// <returns></returns>
     [HttpPut]
     public async Task<IActionResult> Put(ProfileModel profile)
     {
