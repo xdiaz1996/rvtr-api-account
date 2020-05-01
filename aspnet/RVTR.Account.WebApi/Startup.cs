@@ -19,7 +19,7 @@ namespace RVTR.Account.WebApi
   public class Startup
   {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <value></value>
     public IConfiguration Configuration { get; }
@@ -39,17 +39,13 @@ namespace RVTR.Account.WebApi
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
+      services.AddApiVersioning();
       services.AddControllers();
       services.AddDbContext<AccountContext>(options => options.UseNpgsql(Configuration.GetConnectionString("pgsql")));
 
       services.AddCors(cors =>
       {
-        cors.DefaultPolicyName = "default";
-
-        cors.AddDefaultPolicy(policy =>
-        {
-          policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
-        });
+        cors.AddPolicy("Public", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
       });
 
       services.AddScoped<UnitOfWork>();
@@ -92,13 +88,15 @@ namespace RVTR.Account.WebApi
       }
 
       app.UseHttpsRedirection();
-
+      app.UseRouting();
       app.UseSwagger();
+
       app.UseSwaggerUI(urls =>
       {
         urls.SwaggerEndpoint("/swagger/v0/swagger.json", "v0");
       });
-      app.UseRouting();
+
+      app.UseCors();
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>

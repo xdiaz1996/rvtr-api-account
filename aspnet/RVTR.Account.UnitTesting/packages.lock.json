@@ -154,6 +154,11 @@
         "resolved": "2.27.0",
         "contentHash": "eaDHiBziIPLpJ9vLGgxW3YXgHhYCKi0yPgyVuDM1dSTQEzwzannL9i9aqaPfcVliY/vWDCik3ki0PPwxzLUdww=="
       },
+      "Microsoft.AspNetCore.Mvc.Versioning": {
+        "type": "Transitive",
+        "resolved": "4.1.1",
+        "contentHash": "ioFhRz5gm2Ny+t758Jab638eTG8Uui++klcH00EgBuU/BQbjkbFY+9xw/CkoAChIcrJsoQP2NKDYJ09zN5jR0g=="
+      },
       "Microsoft.Bcl.AsyncInterfaces": {
         "type": "Transitive",
         "resolved": "1.1.0",
@@ -1597,6 +1602,7 @@
         "dependencies": {
           "RVTR.Account.DataContext": "1.0.0",
           "RVTR.Account.ObjectModel": "1.0.0",
+          "microsoft.aspnetcore.mvc.versioning": "4.1.1",
           "npgsql.entityframeworkcore.postgresql": "3.1.3",
           "swashbuckle.aspnetcore": "5.4.1"
         }

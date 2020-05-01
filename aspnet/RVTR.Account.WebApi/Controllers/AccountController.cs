@@ -11,8 +11,9 @@ namespace RVTR.Account.WebApi.Controllers
   ///
   /// </summary>
   [ApiController]
-  [EnableCors()]
-  [Route("api/[controller]")]
+  [ApiVersion("0.0")]
+  [EnableCors("Public")]
+  [Route("api/v{version:apiVersion}/[controller]")]
   public class AccountController : ControllerBase
   {
     private readonly ILogger<AccountController> _logger;
