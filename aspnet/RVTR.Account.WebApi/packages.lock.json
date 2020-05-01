@@ -8,6 +8,15 @@
         "resolved": "4.1.1",
         "contentHash": "ioFhRz5gm2Ny+t758Jab638eTG8Uui++klcH00EgBuU/BQbjkbFY+9xw/CkoAChIcrJsoQP2NKDYJ09zN5jR0g=="
       },
+      "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer": {
+        "type": "Direct",
+        "requested": "[*, )",
+        "resolved": "4.1.1",
+        "contentHash": "o/3XuafzLe5WKKvdn0jBcyVNCw2sOQ0xqbQj5wy8mC49GLgfxH2rtJcGpdZEI3hKJgMKglC7yV24DJ+8K32pKQ==",
+        "dependencies": {
+          "Microsoft.AspNetCore.Mvc.Versioning": "4.1.1"
+        }
+      },
       "Npgsql.EntityFrameworkCore.PostgreSQL": {
         "type": "Direct",
         "requested": "[3.1.3, )",

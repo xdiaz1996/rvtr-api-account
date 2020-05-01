@@ -3,13 +3,15 @@ using System.IO;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Options;
 using RVTR.Account.DataContext;
 using RVTR.Account.DataContext.Repositories;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace RVTR.Account.WebApi
 {
@@ -39,39 +41,25 @@ namespace RVTR.Account.WebApi
     /// <param name="services"></param>
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddApiVersioning();
-      services.AddControllers();
-      services.AddDbContext<AccountContext>(options => options.UseNpgsql(Configuration.GetConnectionString("pgsql")));
+      services.AddApiVersioning(options =>
+      {
+        options.ReportApiVersions = true;
+      });
 
+      services.AddControllers();
       services.AddCors(cors =>
       {
         cors.AddPolicy("Public", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
       });
 
+      services.AddDbContext<AccountContext>(options => options.UseNpgsql(Configuration.GetConnectionString("pgsql")));
       services.AddScoped<UnitOfWork>();
-      services.AddSwaggerGen(docs =>
+      services.AddSwaggerGen();
+      services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+      services.AddVersionedApiExplorer(options =>
       {
-        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
-        docs.SwaggerDoc("v0", new OpenApiInfo()
-        {
-          Contact = new OpenApiContact()
-          {
-            Email = "howdy.rvtr@outlook.com",
-            Name = "RVTR",
-            Url = new Uri("https://twitter.com/howdy_rvtr")
-          },
-          License = new OpenApiLicense()
-          {
-            Name = "MIT License",
-            Url = new Uri("https://github.com/RVTR/rvtr-api-account/blob/master/LICENSE")
-          },
-          Title = "Account API",
-          Version = "0.0.0"
-        });
-
-        docs.IncludeXmlComments(xmlPath);
+        options.GroupNameFormat = "'v'V";
+        options.SubstituteApiVersionInUrl = true;
       });
     }
 
@@ -80,7 +68,8 @@ namespace RVTR.Account.WebApi
     /// </summary>
     /// <param name="app"></param>
     /// <param name="env"></param>
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    /// <param name="provider"></param>
+    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
     {
       if (env.IsDevelopment())
       {
@@ -90,15 +79,16 @@ namespace RVTR.Account.WebApi
       app.UseHttpsRedirection();
       app.UseRouting();
       app.UseSwagger();
-
-      app.UseSwaggerUI(urls =>
+      app.UseSwaggerUI(options =>
       {
-        urls.SwaggerEndpoint("/swagger/v0/swagger.json", "v0");
+        foreach (var description in provider.ApiVersionDescriptions)
+        {
+          options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json", description.GroupName);
+        }
       });
 
       app.UseCors();
       app.UseAuthorization();
-
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
