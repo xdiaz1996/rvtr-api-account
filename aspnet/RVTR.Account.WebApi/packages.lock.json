@@ -10,7 +10,7 @@
       },
       "Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer": {
         "type": "Direct",
-        "requested": "[*, )",
+        "requested": "[4.1.1, )",
         "resolved": "4.1.1",
         "contentHash": "o/3XuafzLe5WKKvdn0jBcyVNCw2sOQ0xqbQj5wy8mC49GLgfxH2rtJcGpdZEI3hKJgMKglC7yV24DJ+8K32pKQ==",
         "dependencies": {
