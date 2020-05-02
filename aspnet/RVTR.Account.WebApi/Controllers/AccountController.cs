@@ -7,20 +7,34 @@ using RVTR.Account.ObjectModel.Models;
 
 namespace RVTR.Account.WebApi.Controllers
 {
+  /// <summary>
+  ///
+  /// </summary>
   [ApiController]
-  [EnableCors()]
-  [Route("api/[controller]")]
+  [ApiVersion("0.0")]
+  [EnableCors("Public")]
+  [Route("api/v{version:apiVersion}/[controller]")]
   public class AccountController : ControllerBase
   {
     private readonly ILogger<AccountController> _logger;
     private readonly UnitOfWork _unitOfWork;
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <param name="unitOfWork"></param>
     public AccountController(ILogger<AccountController> logger, UnitOfWork unitOfWork)
     {
       _logger = logger;
       _unitOfWork = unitOfWork;
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(int id)
     {
@@ -37,13 +51,22 @@ namespace RVTR.Account.WebApi.Controllers
       }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
     [HttpGet]
     public async Task<IActionResult> Get()
     {
       return Ok(await _unitOfWork.Account.SelectAsync());
     }
 
-    [HttpGet("{id")]
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    [HttpGet("{id}")]
     public async Task<IActionResult> Get(int id)
     {
       try
@@ -56,6 +79,11 @@ namespace RVTR.Account.WebApi.Controllers
       }
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="account"></param>
+    /// <returns></returns>
     [HttpPost]
     public async Task<IActionResult> Post(AccountModel account)
     {
@@ -65,6 +93,11 @@ namespace RVTR.Account.WebApi.Controllers
       return Accepted(account);
     }
 
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="account"></param>
+    /// <returns></returns>
     [HttpPut]
     public async Task<IActionResult> Put(AccountModel account)
     {
