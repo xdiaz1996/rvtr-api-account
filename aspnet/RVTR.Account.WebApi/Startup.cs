@@ -49,7 +49,14 @@ namespace RVTR.Account.WebApi
         cors.AddPolicy("Public", policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
       });
 
-      services.AddDbContext<AccountContext>(options => options.UseNpgsql(Configuration.GetConnectionString("pgsql")));
+      services.AddDbContext<AccountContext>(options =>
+      {
+        options.UseNpgsql(Configuration.GetConnectionString("pgsql"), options =>
+        {
+          options.EnableRetryOnFailure(3);
+        });
+      });
+
       services.AddScoped<UnitOfWork>();
       services.AddSwaggerGen();
       services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();

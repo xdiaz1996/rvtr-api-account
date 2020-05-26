@@ -1,0 +1,43 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account
+  strategy:
+    rollingUpdate:
+      maxSurge: 3
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: account
+    spec:
+      containers:
+        - env:
+            - name: ConnectionStrings__pgsql
+              value: 'Host=localhost;Database=AccountData;Username=postgres;Password=AccountData@2020;'
+          image: docker.pkg.github.com/rvtr/rvtr-api-account/account:aspnet-rest
+          imagePullPolicy: Always
+          name: account
+          ports:
+            - containerPort: 80
+              name: account-http
+
+        - env:
+            - name: POSTGRES_PASSWORD
+              value: AccountData@2020
+          image: postgres:12
+          imagePullPolicy: Always
+          name: postgres
+          ports:
+            - containerPort: 5432
+              name: postgres-tcp
+
+      imagePullSecrets:
+        - name: github

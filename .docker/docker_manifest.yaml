@@ -9,7 +9,7 @@ services:
     depends_on:
       - data
     environment:
-      ConnectionStrings__pgsql: 'Host=data;Database=AccountDb;Username=postgres;Password=AccountApi@2020;'
+      ConnectionStrings__pgsql: 'Host=data;Database=AccountData;Username=postgres;Password=AccountData@2020;'
     networks:
       - locally
     ports:
@@ -17,7 +17,7 @@ services:
 
   data:
     environment:
-      POSTGRES_PASSWORD: AccountApi@2020
+      POSTGRES_PASSWORD: AccountData@2020
     image: postgres:12
     networks:
       - locally
