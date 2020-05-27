@@ -136,7 +136,7 @@ jobs:
         run: |
           docker image tag account docker.pkg.github.com/rvtr/rvtr-api-account/account:master-aspnet-rest
           docker image push docker.pkg.github.com/rvtr/rvtr-api-account/account:master-aspnet-rest
-      - if: github.ref == 'refs/tags/'
+      - if: startsWith(github.ref, 'refs/tags/')
         name: docker_push
         run: |
           docker image tag account docker.pkg.github.com/rvtr/rvtr-api-account/account:aspnet-rest
@@ -150,4 +150,3 @@ on:
   push:
     branches:
       - master
-    tags:
