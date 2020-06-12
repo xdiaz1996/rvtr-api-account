@@ -26,20 +26,6 @@ namespace RVTR.Account.DataContext.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BankCardModel",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Expiry = table.Column<DateTime>(nullable: false),
-                    Number = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BankCardModel", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Accounts",
                 columns: table => new
                 {
@@ -65,23 +51,18 @@ namespace RVTR.Account.DataContext.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    BankCardId = table.Column<int>(nullable: true),
+                    Expiry = table.Column<DateTime>(nullable: false),
+                    Number = table.Column<string>(nullable: true),
                     Name = table.Column<string>(nullable: true),
-                    AccountModelId = table.Column<int>(nullable: true)
+                    AccountId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PaymentModel", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PaymentModel_Accounts_AccountModelId",
-                        column: x => x.AccountModelId,
+                        name: "FK_PaymentModel_Accounts_AccountId",
+                        column: x => x.AccountId,
                         principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_PaymentModel_BankCardModel_BankCardId",
-                        column: x => x.BankCardId,
-                        principalTable: "BankCardModel",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -140,14 +121,9 @@ namespace RVTR.Account.DataContext.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PaymentModel_AccountModelId",
+                name: "IX_PaymentModel_AccountId",
                 table: "PaymentModel",
-                column: "AccountModelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PaymentModel_BankCardId",
-                table: "PaymentModel",
-                column: "BankCardId");
+                column: "AccountId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Profiles_AccountId",
@@ -165,9 +141,6 @@ namespace RVTR.Account.DataContext.Migrations
 
             migrationBuilder.DropTable(
                 name: "Profiles");
-
-            migrationBuilder.DropTable(
-                name: "BankCardModel");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

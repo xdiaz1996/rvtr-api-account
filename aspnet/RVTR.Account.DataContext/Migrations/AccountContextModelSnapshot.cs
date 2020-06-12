@@ -66,24 +66,6 @@ namespace RVTR.Account.DataContext.Migrations
                     b.ToTable("AddressModel");
                 });
 
-            modelBuilder.Entity("RVTR.Account.ObjectModel.Models.BankCardModel", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<DateTime>("Expiry")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Number")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("BankCardModel");
-                });
-
             modelBuilder.Entity("RVTR.Account.ObjectModel.Models.NameModel", b =>
                 {
                     b.Property<int>("Id")
@@ -115,20 +97,21 @@ namespace RVTR.Account.DataContext.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("AccountModelId")
+                    b.Property<int?>("AccountId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("BankCardId")
-                        .HasColumnType("integer");
+                    b.Property<DateTime>("Expiry")
+                        .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
+                    b.Property<string>("Number")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("AccountModelId");
-
-                    b.HasIndex("BankCardId");
+                    b.HasIndex("AccountId");
 
                     b.ToTable("PaymentModel");
                 });
@@ -172,13 +155,9 @@ namespace RVTR.Account.DataContext.Migrations
 
             modelBuilder.Entity("RVTR.Account.ObjectModel.Models.PaymentModel", b =>
                 {
-                    b.HasOne("RVTR.Account.ObjectModel.Models.AccountModel", null)
+                    b.HasOne("RVTR.Account.ObjectModel.Models.AccountModel", "Account")
                         .WithMany("Payments")
-                        .HasForeignKey("AccountModelId");
-
-                    b.HasOne("RVTR.Account.ObjectModel.Models.BankCardModel", "BankCard")
-                        .WithMany()
-                        .HasForeignKey("BankCardId");
+                        .HasForeignKey("AccountId");
                 });
 
             modelBuilder.Entity("RVTR.Account.ObjectModel.Models.ProfileModel", b =>

@@ -15,7 +15,8 @@ namespace RVTR.Account.UnitTesting.Tests
         new PaymentModel()
         {
           Id = 0,
-          BankCard = new BankCardModel(),
+          Expiry=DateTime.Now,
+          Number="123456789132456",
           Name = "name"
         }
       }

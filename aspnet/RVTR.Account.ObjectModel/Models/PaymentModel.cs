@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -10,10 +11,12 @@ namespace RVTR.Account.ObjectModel.Models
   {
     public int Id { get; set; }
 
-    public BankCardModel BankCard { get; set; }
+    public DateTime Expiry { get; set; }
+
+    public string Number { get; set; }
 
     public string Name { get; set; }
-   
+    public virtual AccountModel Account { get; set; }
 
     /// <summary>
     /// Represents the _Payment_ `Validate` method
