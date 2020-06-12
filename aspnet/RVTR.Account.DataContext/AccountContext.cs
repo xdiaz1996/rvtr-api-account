@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using RVTR.Account.ObjectModel.Models;
 
 namespace RVTR.Account.DataContext
@@ -13,6 +13,14 @@ namespace RVTR.Account.DataContext
 
     public AccountContext(DbContextOptions<AccountContext> options) : base(options) { }
 
+    public AccountContext() { }
+    protected override void OnConfiguring(DbContextOptionsBuilder options)
+    {
+      if (!options.IsConfigured)
+      {
+        options.UseNpgsql("Host=localhost;Database=AccountDb;Username=postgres;Password=abc123");
+      }
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<AccountModel>().HasKey(e => e.Id);

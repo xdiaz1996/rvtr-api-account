@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RVTR.Account.ObjectModel.Models
@@ -13,6 +13,7 @@ namespace RVTR.Account.ObjectModel.Models
     public BankCardModel BankCard { get; set; }
 
     public string Name { get; set; }
+   
 
     /// <summary>
     /// Represents the _Payment_ `Validate` method

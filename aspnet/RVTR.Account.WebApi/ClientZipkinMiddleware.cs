@@ -27,7 +27,7 @@ namespace RVTR.Account.WebApi
       var lifetime = context.RequestServices.GetService<IHostApplicationLifetime>();
       var statistics = new Statistics();
 
-      lifetime.ApplicationStarted.Register(() =>
+/*      lifetime.ApplicationStarted.Register(() =>
       {
         var logger = new TracingLogger(_loggerFactory, "zipkin.aspnet");
         var sender = new HttpZipkinSender(_configuration.GetConnectionString("zipkin"), "application/json");
@@ -38,7 +38,7 @@ namespace RVTR.Account.WebApi
         TraceManager.RegisterTracer(tracer);
         TraceManager.Start(logger);
       });
-
+*/
       lifetime.ApplicationStopped.Register(() =>
       {
         TraceManager.Stop();
