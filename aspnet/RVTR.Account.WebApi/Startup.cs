@@ -43,7 +43,9 @@ namespace RVTR.Account.WebApi
         options.ReportApiVersions = true;
       });
 
-      services.AddControllers();
+      services.AddControllers().AddNewtonsoftJson(options=>
+      options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
       services.AddCors(cors =>
       {
         cors.AddPolicy("Public", policy =>

@@ -21,7 +21,7 @@ namespace RVTR.Account.DataContext
         options.UseNpgsql("Host=localhost;Database=AccountDb;Username=postgres;Password=abc123");
       }
     }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+/*    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       modelBuilder.Entity<AccountModel>().HasKey(e => e.Id);
       modelBuilder.Entity<AddressModel>().HasKey(e => e.Id);
@@ -29,6 +29,6 @@ namespace RVTR.Account.DataContext
       modelBuilder.Entity<NameModel>().HasKey(e => e.Id);
       modelBuilder.Entity<PaymentModel>().HasKey(e => e.Id);
       modelBuilder.Entity<ProfileModel>().HasKey(e => e.Id);
-    }
+    }*/
   }
 }
