@@ -1,5 +1,6 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace RVTR.Account.ObjectModel.Models
 {
@@ -8,6 +9,7 @@ namespace RVTR.Account.ObjectModel.Models
   /// </summary>
   public class ProfileModel : IValidatableObject
   {
+    [ForeignKey("NameModel")]
     public int Id { get; set; }
 
     public string Email { get; set; }
@@ -15,6 +17,8 @@ namespace RVTR.Account.ObjectModel.Models
     public NameModel Name { get; set; }
 
     public string Phone { get; set; }
+    public string Age { get; set; }
+    public string Image { get; set; }
 
     public int? AccountId { get; set; }
 

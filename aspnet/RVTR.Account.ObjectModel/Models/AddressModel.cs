@@ -19,6 +19,7 @@ namespace RVTR.Account.ObjectModel.Models
     public string StateProvince { get; set; }
 
     public string Street { get; set; }
+    public string Unit { get; set; }
 
     /// <summary>
     /// Represents the _Address_ `Validate` method

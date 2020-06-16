@@ -18,7 +18,8 @@ namespace RVTR.Account.DataContext.Migrations
                     Country = table.Column<string>(nullable: true),
                     PostalCode = table.Column<string>(nullable: true),
                     StateProvince = table.Column<string>(nullable: true),
-                    Street = table.Column<string>(nullable: true)
+                    Street = table.Column<string>(nullable: true),
+                    Unit = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -42,7 +43,7 @@ namespace RVTR.Account.DataContext.Migrations
                         column: x => x.AddressId,
                         principalTable: "AddressModel",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,9 +52,9 @@ namespace RVTR.Account.DataContext.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Expiry = table.Column<DateTime>(nullable: false),
-                    Number = table.Column<string>(nullable: true),
-                    Name = table.Column<string>(nullable: true),
+                    CardExpirationDate = table.Column<DateTime>(nullable: false),
+                    CardNumber = table.Column<string>(nullable: true),
+                    CardName = table.Column<string>(nullable: true),
                     AccountId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -64,7 +65,7 @@ namespace RVTR.Account.DataContext.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -75,6 +76,8 @@ namespace RVTR.Account.DataContext.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Email = table.Column<string>(nullable: true),
                     Phone = table.Column<string>(nullable: true),
+                    Age = table.Column<string>(nullable: true),
+                    Image = table.Column<string>(nullable: true),
                     AccountId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
@@ -85,7 +88,7 @@ namespace RVTR.Account.DataContext.Migrations
                         column: x => x.AccountId,
                         principalTable: "Accounts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -106,7 +109,7 @@ namespace RVTR.Account.DataContext.Migrations
                         column: x => x.ProfileId,
                         principalTable: "Profiles",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
