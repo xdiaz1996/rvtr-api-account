@@ -19,7 +19,8 @@ namespace RVTR.Account.UnitTesting.Tests
           Country = "country",
           PostalCode = "postalcode",
           StateProvince = "stateprovince",
-          Street = "street"
+          Street = "street",
+          Unit = "34"
         }
       }
     };

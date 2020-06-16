@@ -61,6 +61,9 @@ namespace RVTR.Account.DataContext.Migrations
                     b.Property<string>("Street")
                         .HasColumnType("text");
 
+                    b.Property<string>("Unit")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.ToTable("AddressModel");
@@ -100,13 +103,13 @@ namespace RVTR.Account.DataContext.Migrations
                     b.Property<int?>("AccountId")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("Expiry")
+                    b.Property<DateTime>("CardExpirationDate")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("CardName")
                         .HasColumnType("text");
 
-                    b.Property<string>("Number")
+                    b.Property<string>("CardNumber")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
@@ -126,7 +129,13 @@ namespace RVTR.Account.DataContext.Migrations
                     b.Property<int?>("AccountId")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Age")
+                        .HasColumnType("text");
+
                     b.Property<string>("Email")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Image")
                         .HasColumnType("text");
 
                     b.Property<string>("Phone")
@@ -143,28 +152,32 @@ namespace RVTR.Account.DataContext.Migrations
                 {
                     b.HasOne("RVTR.Account.ObjectModel.Models.AddressModel", "Address")
                         .WithMany()
-                        .HasForeignKey("AddressId");
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RVTR.Account.ObjectModel.Models.NameModel", b =>
                 {
                     b.HasOne("RVTR.Account.ObjectModel.Models.ProfileModel", "Profile")
                         .WithOne("Name")
-                        .HasForeignKey("RVTR.Account.ObjectModel.Models.NameModel", "ProfileId");
+                        .HasForeignKey("RVTR.Account.ObjectModel.Models.NameModel", "ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RVTR.Account.ObjectModel.Models.PaymentModel", b =>
                 {
                     b.HasOne("RVTR.Account.ObjectModel.Models.AccountModel", "Account")
                         .WithMany("Payments")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("RVTR.Account.ObjectModel.Models.ProfileModel", b =>
                 {
                     b.HasOne("RVTR.Account.ObjectModel.Models.AccountModel", "Account")
                         .WithMany("Profiles")
-                        .HasForeignKey("AccountId");
+                        .HasForeignKey("AccountId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

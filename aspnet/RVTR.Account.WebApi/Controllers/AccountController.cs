@@ -58,7 +58,7 @@ namespace RVTR.Account.WebApi.Controllers
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-      return Ok(await _unitOfWork.Account.SelectAsync());
+      return Ok(await _unitOfWork.Account.getAllAccounts());
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ namespace RVTR.Account.WebApi.Controllers
     {
       try
       {
-        return Ok(await _unitOfWork.Account.SelectAsync(id));
+        return Ok(await _unitOfWork.Account.getAccount(id));
       }
       catch
       {

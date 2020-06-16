@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace RVTR.Account.ObjectModel.Models
@@ -16,7 +16,7 @@ namespace RVTR.Account.ObjectModel.Models
 
     public int? ProfileId { get; set; }
 
-    public ProfileModel Profile { get; set; }
+    public virtual ProfileModel Profile { get; set; }
 
     /// <summary>
     /// Represents the _Name_ `Validate` method

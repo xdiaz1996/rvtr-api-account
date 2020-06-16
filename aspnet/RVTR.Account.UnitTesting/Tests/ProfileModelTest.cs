@@ -19,7 +19,9 @@ namespace RVTR.Account.UnitTesting.Tests
           Name = new NameModel(),
           Phone = "1234567890",
           AccountId = null,
-          Account = null
+          Account = null,
+          Age = "Adult",
+          Image = null
         }
       }
     };

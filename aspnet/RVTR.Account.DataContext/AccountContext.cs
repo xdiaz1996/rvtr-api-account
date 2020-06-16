@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RVTR.Account.ObjectModel.Models;
+using System.Linq;
 
 namespace RVTR.Account.DataContext
 {
@@ -21,14 +22,20 @@ namespace RVTR.Account.DataContext
         options.UseNpgsql("Host=localhost;Database=AccountDb;Username=postgres;Password=abc123");
       }
     }
-/*    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-      modelBuilder.Entity<AccountModel>().HasKey(e => e.Id);
+      foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+      {
+        foreignKey.DeleteBehavior = DeleteBehavior.Cascade;
+      }
+/*      modelBuilder.Entity<AccountModel>().HasKey(e => e.Id);
       modelBuilder.Entity<AddressModel>().HasKey(e => e.Id);
       modelBuilder.Entity<BankCardModel>().HasKey(e => e.Id);
       modelBuilder.Entity<NameModel>().HasKey(e => e.Id);
       modelBuilder.Entity<PaymentModel>().HasKey(e => e.Id);
-      modelBuilder.Entity<ProfileModel>().HasKey(e => e.Id);
-    }*/
+      modelBuilder.Entity<ProfileModel>().HasMany(e => e.Name)
+    .WithOne(e => e.)
+    .OnDelete(DeleteBehavior.ClientCascade); ;
+*/    }
   }
 }

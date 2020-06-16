@@ -11,11 +11,11 @@ namespace RVTR.Account.ObjectModel.Models
   {
     public int Id { get; set; }
 
-    public DateTime Expiry { get; set; }
+    public DateTime CardExpirationDate { get; set; }
 
-    public string Number { get; set; }
+    public string CardNumber { get; set; }
 
-    public string Name { get; set; }
+    public string CardName { get; set; }
     public virtual AccountModel Account { get; set; }
 
     /// <summary>

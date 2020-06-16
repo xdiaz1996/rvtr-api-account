@@ -15,9 +15,10 @@ namespace RVTR.Account.UnitTesting.Tests
         new PaymentModel()
         {
           Id = 0,
-          Expiry=DateTime.Now,
-          Number="123456789132456",
-          Name = "name"
+          CardExpirationDate=DateTime.Now,
+          CardNumber="123456789132456",
+          CardName = "name",
+          
         }
       }
     };
